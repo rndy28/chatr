@@ -9,7 +9,7 @@ import path from 'path';
 import authRoutes from './routes/auth.routes';
 import usersRoutes from './routes/users.routes';
 import requireUser from './middleware/requireUser';
-import { PORT, __prod__ } from './constants';
+import { PORT } from './constants';
 
 const app = express();
 const httpServer = createServer(app);
@@ -34,13 +34,6 @@ app.use('/api/assets', express.static(path.join(__dirname, './assets')));
 app.use('/api/auth', authRoutes);
 app.use('/api/users', requireUser, usersRoutes);
 
-
-if (__prod__) {
-    app.use(express.static(path.join(__dirname, '../client/dist')));
-    app.get('*', (_req, res) => {
-        res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
-    });
-}
 
 
 

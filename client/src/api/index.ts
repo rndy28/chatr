@@ -3,7 +3,7 @@ import { localStorageGet } from "libs/helpers";
 import type { IUser } from "libs/types";
 
 const instance = axios.create({
-  baseURL: "http://localhost:5000/api/",
+  baseURL: import.meta.env.VITE_SERVER_ORIGIN,
 });
 
 instance.interceptors.request.use((config) => {

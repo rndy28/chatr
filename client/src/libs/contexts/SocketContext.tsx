@@ -3,7 +3,7 @@ import { MessageT } from "libs/types";
 import { useEffect, useMemo, useReducer, useState } from "react";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000", {
+const socket = io(import.meta.env.VITE_SERVER_ORIGIN, {
   autoConnect: false,
   auth: {
     token: localStorageGet<string>("token"),
