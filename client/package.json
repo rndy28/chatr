@@ -1,0 +1,46 @@
+{
+  "name": "chat-app",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "jest --env=jsdom"
+  },
+  "dependencies": {
+    "@tabler/icons": "^1.66.0",
+    "axios": "^0.27.2",
+    "framer-motion": "^6.3.1",
+    "javascript-time-ago": "^2.5.5",
+    "lodash.debounce": "^4.0.8",
+    "normalize.css": "^8.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.2.1",
+    "react-time-ago": "^7.2.1",
+    "socket.io-client": "^4.5.0",
+    "styled-components": "^5.3.3",
+    "uuid": "^8.3.2",
+    "vite-tsconfig-paths": "^3.3.17"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "13.3.0",
+    "@types/jest": "^28.1.4",
+    "@types/lodash.debounce": "^4.0.7",
+    "@types/react": "^18.0.14",
+    "@types/react-dom": "^18.0.5",
+    "@types/styled-components": "^5.1.21",
+    "@types/uuid": "^8.3.4",
+    "@vitejs/plugin-react": "^1.0.7",
+    "babel-jest": "^28.1.0",
+    "babel-plugin-styled-components": "^2.0.7",
+    "jest": "^28.1.0",
+    "jest-environment-jsdom": "^28.1.0",
+    "react-test-renderer": "^18.1.0",
+    "ts-jest": "^28.0.2",
+    "typescript": "^4.4.4",
+    "vite": "^2.7.2"
+  }
+}
