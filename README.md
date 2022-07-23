@@ -12,12 +12,14 @@
 - [ExpressJS](https://expressjs.com/)
 
 ## Roadmap
+### in order
 - [x] One to one chat
 - [x] One to many chat
 - [x] Online indicator (will show up when youre on conversation with someone)
 - [x] Edit Profile
 - [x] Search contacts
 - [x] Add contact
+- [ ] switch to graphql for server, urql for client and use relational db for managing data
 - [ ] Group chat
 - [ ] Description panel
 - [ ] Search messages

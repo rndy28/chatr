@@ -2,6 +2,14 @@ import type { Size, Variant } from "libs/types";
 import React, { forwardRef } from "react";
 import styled, { css, keyframes } from "styled-components";
 
+type StyledButtonProps = {
+  variant: Variant;
+  size: Size;
+  loading?: boolean;
+  withIcon?: boolean;
+  disabled?: boolean;
+};
+
 const spin1 = keyframes`
      0%    {clip-path: polygon(50% 50%,0       0,  50%   0%,  50%    0%, 50%    0%, 50%    0%, 50%    0% )}
    12.5% {clip-path: polygon(50% 50%,0       0,  50%   0%,  100%   0%, 100%   0%, 100%   0%, 100%   0% )}
@@ -24,8 +32,7 @@ const ButtonLoader = styled.div`
   aspect-ratio: 1;
   border-radius: 50%;
   border: 3px solid #eceff4;
-  animation: ${spin1} 0.8s infinite linear alternate,
-    ${spin2} 1.6s infinite linear;
+  animation: ${spin1} 0.8s infinite linear alternate, ${spin2} 1.6s infinite linear;
 `;
 
 const primary = css`
@@ -42,8 +49,7 @@ const secondary = css`
   &:hover {
     background-color: #81a1c1;
   }
-`
-
+`;
 
 const sm = css`
   height: 2.5rem;
@@ -92,26 +98,12 @@ const Container = styled.button<StyledButtonProps>`
     `}
 `;
 
-type StyledButtonProps = {
-  variant: Variant ;
-  size: Size;
-  loading?: boolean;
-  withIcon?: boolean;
-  disabled?: boolean;
-};
+interface Props extends React.ComponentPropsWithoutRef<"button">, StyledButtonProps {}
 
-interface Props
-  extends React.ComponentPropsWithoutRef<"button">,
-    StyledButtonProps {}
-
-const Button = forwardRef<HTMLButtonElement, Props>(
-  ({ children, loading, disabled, ...props }, ref) => {
-    return (
-      <Container ref={ref} disabled={loading ? true : undefined} {...props}>
-        {loading ? <ButtonLoader /> : children}
-      </Container>
-    );
-  }
-);
+const Button = forwardRef<HTMLButtonElement, Props>(({ children, loading, ...props }, ref) => (
+  <Container ref={ref} disabled={loading ? true : undefined} {...props}>
+    {loading ? <ButtonLoader /> : children}
+  </Container>
+));
 
 export default Button;

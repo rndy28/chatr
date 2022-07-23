@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
-export const useOutsideClick = <RefType extends HTMLElement>(
+const useOutsideClick = <RefType extends HTMLElement>(
   ref: React.RefObject<RefType>,
-  callback: (event: MouseEvent) => void
+  callback: (event: MouseEvent) => void,
 ) => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -19,3 +19,5 @@ export const useOutsideClick = <RefType extends HTMLElement>(
     };
   }, [ref, callback]);
 };
+
+export default useOutsideClick;

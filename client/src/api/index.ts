@@ -7,6 +7,7 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use((config) => {
+  // eslint-disable-next-line no-param-reassign
   config.headers = {
     Authorization: `Bearer ${localStorageGet<string>("token")}`,
   };
@@ -42,7 +43,7 @@ export const getChats = async () => {
 };
 
 export const signin = async (
-  payload: Object
+  payload: Object,
 ): Promise<AxiosResponse<IUser & { token: string }>> => {
   try {
     const response = await instance.post("auth/signin", payload);
@@ -66,7 +67,7 @@ export const signup = async (payload: {
 
 export const addContact = async (payload: {
   username: string;
-}): Promise<AxiosResponse<IUser>> => {
+}): Promise<AxiosResponse<{ message: string }>> => {
   try {
     const response = await instance.post("users/add-contact", payload);
     return response;
@@ -76,7 +77,7 @@ export const addContact = async (payload: {
 };
 
 export const updateUserProfile = async (
-  payload: FormData
+  payload: FormData,
 ): Promise<AxiosResponse<IUser>> => {
   try {
     const response = await instance.patch("users/profile", payload);
@@ -90,7 +91,8 @@ export const deleteUserProfilePicture = async (): Promise<
   AxiosResponse<IUser>
 > => {
   try {
-    const response = await instance.patch("users/profile/delete", {});
+    const response = await instance.patch("users/profile/delete", {
+    });
     return response;
   } catch (error: any) {
     return error.response;

@@ -1,6 +1,6 @@
 import { createCtx, localStorageGet } from "libs/helpers";
 import { MessageT } from "libs/types";
-import { useEffect, useMemo, useReducer, useState } from "react";
+import React, { useEffect, useMemo, useReducer, useState } from "react";
 import { io } from "socket.io-client";
 
 const socket = io(import.meta.env.VITE_SERVER_ORIGIN, {
@@ -9,21 +9,6 @@ const socket = io(import.meta.env.VITE_SERVER_ORIGIN, {
     token: localStorageGet<string>("token"),
   },
 });
-
-const [useSocket, Provider] = createCtx<SocketContextT>({} as SocketContextT);
-
-type SocketContextT = {
-  messages: MessageT[];
-  newMessages: MessageT[];
-  dispatchMessages: React.Dispatch<ActionT>;
-  socket: typeof socket;
-  onlineUsers: string[];
-};
-
-type StateT = {
-  messages: MessageT[];
-  newMessages: MessageT[];
-};
 
 type ActionT =
   | {
@@ -45,40 +30,74 @@ type ActionT =
       type: "RESET_MESSAGES";
     };
 
+type SocketContextT = {
+  messages: MessageT[];
+  newMessages: MessageT[];
+  dispatchMessages: React.Dispatch<ActionT>;
+  socket: typeof socket;
+  onlineUsers: string[];
+};
+
+type StateT = {
+  messages: MessageT[];
+  newMessages: MessageT[];
+};
+
+const [useSocket, Provider] = createCtx<SocketContextT>();
+
 function reducer(state: StateT, action: ActionT) {
   switch (action.type) {
     case "ADD_MESSAGE":
-      if (state.messages.length === 0)
-        return { ...state, messages: [action.payload] };
+      if (state.messages.length === 0) {
+        return {
+          ...state,
+          messages: [action.payload],
+        };
+      }
       return {
         ...state,
         messages: [...state.messages, action.payload],
       };
     case "SET_MESSAGES":
-      if (state.messages.length === 0)
-        return { ...state, messages: action.payload };
+      if (state.messages.length === 0) {
+        return {
+          ...state,
+          messages: action.payload,
+        };
+      }
       return {
         ...state,
         messages: [...state.messages, ...action.payload],
       };
-    case "SET_READ_MESSAGES":
+    case "SET_READ_MESSAGES": {
       const { conversationWith, messages } = action.payload;
-      if (!conversationWith)
+
+      if (!conversationWith) {
         return {
           ...state,
           newMessages: messages.slice(),
         };
+      }
       return {
         ...state,
         newMessages: messages.map((message) => {
-          if (message.isRead) return { ...message };
-          if (message.from === conversationWith) {
-            message.isRead = true;
-            return { ...message };
+          if (message.isRead) {
+            return {
+              ...message,
+            };
           }
-          return { ...message };
+          if (message.from === conversationWith) {
+            return {
+              ...message,
+              isRead: true,
+            };
+          }
+          return {
+            ...message,
+          };
         }),
       };
+    }
     case "RESET_MESSAGES":
       return {
         ...state,
@@ -100,22 +119,36 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     const token = localStorageGet<string>("token");
 
     if (token) {
-      socket.auth = { token };
+      socket.auth = {
+        token,
+      };
       socket.connect();
     }
   }, []);
 
   const value = useMemo(
-    () => ({ socket, newMessages, messages, dispatchMessages, onlineUsers }),
-    [onlineUsers, messages, newMessages, socket]
+    () => ({
+      socket,
+      newMessages,
+      messages,
+      dispatchMessages,
+      onlineUsers,
+    }),
+    [onlineUsers, messages, newMessages, socket],
   );
 
   useEffect(() => {
     socket.on("messages", (data: MessageT[]) => {
-      dispatchMessages({ type: "SET_MESSAGES", payload: data });
+      dispatchMessages({
+        type: "SET_MESSAGES",
+        payload: data,
+      });
     });
     socket.on("message", (message: MessageT) => {
-      dispatchMessages({ type: "ADD_MESSAGE", payload: message });
+      dispatchMessages({
+        type: "ADD_MESSAGE",
+        payload: message,
+      });
     });
     socket.on("online-users", (users: string[]) => {
       setOnlineUsers(users);

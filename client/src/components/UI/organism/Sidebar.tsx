@@ -12,8 +12,8 @@ import { AnimatePresence } from "framer-motion";
 import { ASSETS_PATH } from "libs/constants";
 import { useSocket } from "libs/contexts/SocketContext";
 import { useUser } from "libs/contexts/UserContext";
-import { useDebouncedQuery } from "libs/hooks/useDebouncedQuery";
-import { useOutsideClick } from "libs/hooks/useOutsideClick";
+import useDebouncedQuery from "libs/hooks/useDebouncedQuery";
+import useOutsideClick from "libs/hooks/useOutsideClick";
 import { IUser } from "libs/types";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -68,21 +68,15 @@ const Sidebar = ({ setConversation, conversationWith }: Props) => {
     useCallback(
       (e) => {
         const target = e.target as HTMLElement;
-        if (
-          target.classList.contains("options") ||
-          target.parentElement?.classList.contains("options")
-        )
-          return;
+        if (target.classList.contains("options") || target.parentElement?.classList.contains("options")) return;
         setOpenMenu(false);
       },
-      [menuRef]
-    )
+      [menuRef],
+    ),
   );
 
-  const onToggleDrawer = (drawerName: Drawer) => {
-    return () => {
-      setDrawer((prev) => (prev !== drawerName ? drawerName : undefined));
-    };
+  const onToggleDrawer = (drawerName: Drawer) => () => {
+    setDrawer((prev) => (prev !== drawerName ? drawerName : undefined));
   };
 
   const onMenuOpen = () => {
@@ -91,7 +85,9 @@ const Sidebar = ({ setConversation, conversationWith }: Props) => {
 
   const onLogout = () => {
     setUser(undefined);
-    dispatchMessages({ type: "RESET_MESSAGES" });
+    dispatchMessages({
+      type: "RESET_MESSAGES",
+    });
     localStorage.clear();
     socket.disconnect();
     navigate("/signin");
@@ -127,7 +123,7 @@ const Sidebar = ({ setConversation, conversationWith }: Props) => {
   useEffect(() => {
     socket.emit(
       "updated-messages",
-      messages.filter((message) => message.isRead)
+      messages.filter((message) => message.isRead),
     );
   }, [newMessages]);
 
@@ -137,12 +133,13 @@ const Sidebar = ({ setConversation, conversationWith }: Props) => {
         <Header>
           {user!.profile ? (
             <Profile
+              username={user!.username}
               picture={ASSETS_PATH + user!.profile}
               size="md"
               onClick={onToggleDrawer("profile")}
             />
           ) : (
-            <Profile size="md" onClick={onToggleDrawer("profile")} />
+            <Profile username={user!.username} size="md" onClick={onToggleDrawer("profile")} />
           )}
 
           <Flex
@@ -152,17 +149,8 @@ const Sidebar = ({ setConversation, conversationWith }: Props) => {
               position: relative;
             `}
           >
-            <IconMapper
-              name="message"
-              role="button"
-              onClick={onToggleDrawer("contact")}
-            />
-            <IconMapper
-              name="options"
-              role="button"
-              className="options"
-              onClick={onMenuOpen}
-            />
+            <IconMapper name="message" role="button" onClick={onToggleDrawer("contact")} />
+            <IconMapper name="options" role="button" className="options" data-testid="options-icon" onClick={onMenuOpen} />
             <AnimatePresence>
               {menu && (
                 <Menu
@@ -171,7 +159,6 @@ const Sidebar = ({ setConversation, conversationWith }: Props) => {
                     x: -100,
                     y: 50,
                   }}
-        
                 >
                   <Menu.Item onClick={onModalToggle}>New Contact</Menu.Item>
                   <Menu.Item onClick={onLogout}>Logout</Menu.Item>
@@ -192,14 +179,9 @@ const Sidebar = ({ setConversation, conversationWith }: Props) => {
         />
         <Conversations setConversation={setConversation} query={query} />
         <AnimatePresence>
-          {drawer === "profile" && (
-            <ProfileDrawer onClose={onToggleDrawer("profile")} />
-          )}
+          {drawer === "profile" && <ProfileDrawer onClose={onToggleDrawer("profile")} />}
           {drawer === "contact" && (
-            <ContactDrawer
-              onClose={onToggleDrawer("contact")}
-              setConversation={setConversation}
-            />
+            <ContactDrawer onClose={onToggleDrawer("contact")} setConversation={setConversation} />
           )}
           {modal && <ContactFormModal onModalClose={onModalToggle} />}
         </AnimatePresence>

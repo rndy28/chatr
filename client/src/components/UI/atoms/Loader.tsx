@@ -1,5 +1,7 @@
+/* eslint-disable no-nested-ternary */
 import styled, { keyframes } from "styled-components";
 import type { Size } from "libs/types";
+import React from "react";
 
 const rotate = keyframes`
    100% {transform: rotate(1turn)}
@@ -39,12 +41,10 @@ interface Props extends React.ComponentPropsWithoutRef<"div"> {
   size?: Size;
 }
 
-const Loader = ({ size = "lg", ...props }: Props) => {
-  return (
-    <Container size={size} {...props}>
-      <div></div>
-    </Container>
-  );
-};
+const Loader = ({ size = "lg", ...props }: Props) => (
+  <Container size={size} {...props}>
+    <div />
+  </Container>
+);
 
 export default Loader;

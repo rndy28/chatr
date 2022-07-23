@@ -11,12 +11,11 @@ import { ASSETS_PATH } from "libs/constants";
 import { useSocket } from "libs/contexts/SocketContext";
 import { useUser } from "libs/contexts/UserContext";
 import { IUser } from "libs/types";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { v4 } from "uuid";
 
 const Container = styled(motion.main)`
-  max-height: inherit;
   height: inherit;
   display: flex;
   flex-direction: column;
@@ -25,9 +24,6 @@ const Container = styled(motion.main)`
   z-index: 3;
   width: 100%;
   max-width: 30rem;
-  & > div {
-    flex-grow: 1;
-  }
   @media (min-width: 768px) {
     max-width: none;
     position: relative;
@@ -66,7 +62,10 @@ const Main = ({ conversationWith, clearConversation }: Props) => {
       sent: Math.floor(new Date().getTime() / 1000),
       isRead: false,
     };
-    dispatchMessages({ type: "ADD_MESSAGE", payload });
+    dispatchMessages({
+      type: "ADD_MESSAGE",
+      payload,
+    });
     socket.emit("message", payload);
   };
 
@@ -90,13 +89,15 @@ const Main = ({ conversationWith, clearConversation }: Props) => {
   };
 
   useEffect(() => {
-    if (inputRef.current) {
+    if (inputRef.current && window.innerWidth >= 950) {
       inputRef.current.focus();
     }
   }, []);
 
   useEffect(() => {
-    inputRef.current && (inputRef.current.textContent = "");
+    if (inputRef.current) {
+      inputRef.current.textContent = "";
+    }
     setValue("");
     if (messagesRef.current) {
       messagesRef.current.scroll({
@@ -107,12 +108,7 @@ const Main = ({ conversationWith, clearConversation }: Props) => {
   }, [messages, conversationWith]);
 
   return (
-    <Container
-      variants={mainVariant}
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
-    >
+    <Container variants={mainVariant} initial="hidden" animate="visible" exit="hidden">
       <Header
         css={`
           flex-shrink: 0;
@@ -132,12 +128,9 @@ const Main = ({ conversationWith, clearConversation }: Props) => {
             />
           )}
           {conversationWith.profile ? (
-            <Profile
-              picture={ASSETS_PATH + conversationWith.profile}
-              size="md"
-            />
+            <Profile username={conversationWith.username} picture={ASSETS_PATH + conversationWith.profile} size="md" />
           ) : (
-            <Profile size="md" />
+            <Profile username={conversationWith.username} size="md" />
           )}
           <Flex
             direction="column"
@@ -163,9 +156,7 @@ const Main = ({ conversationWith, clearConversation }: Props) => {
         ref={messagesRef}
         conversationWith={conversationWith}
         messages={messages.filter(
-          (message) =>
-            message.to === conversationWith.username ||
-            message.from === conversationWith.username
+          (message) => message.to === conversationWith.username || message.from === conversationWith.username,
         )}
       />
       <Form onSubmit={handleSubmit}>

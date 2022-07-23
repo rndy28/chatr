@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import React from "react";
 
 const Container = styled.span`
   font-size: 0.813rem;
@@ -8,8 +9,6 @@ const Container = styled.span`
 
 interface Props extends React.ComponentPropsWithoutRef<"span"> {}
 
-const Error = ({ children, ...props }: Props) => {
-  return <Container {...props}>{children}</Container>;
-};
+const Error = ({ children, ...props }: Props) => <Container {...props}>{children}</Container>;
 
 export default Error;

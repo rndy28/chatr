@@ -5,18 +5,17 @@ const Container = styled.header`
   position: sticky;
   top: 0;
   min-height: 4.5rem;
-  width: inherit;
+  width: 100%;
   padding-inline: 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #ebebeb;
+  background-color: inherit;
 `;
 
 interface Props extends React.ComponentPropsWithoutRef<"header"> {}
 
-const Header = ({ children, ...props }: Props) => {
-  return <Container {...props}>{children}</Container>;
-};
+const Header = ({ children, ...props }: Props) => <Container {...props}>{children}</Container>;
 
 export default Header;

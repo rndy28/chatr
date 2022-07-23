@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import React, { forwardRef } from "react";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -6,7 +6,7 @@ const Container = styled.div`
   width: 100%;
   max-width: 60rem;
   border-radius: 0.5rem;
-  padding:  0.8rem;
+  padding: 0.8rem;
   display: flex;
   overflow: hidden;
   position: relative;
@@ -19,7 +19,6 @@ const Placeholder = styled.span`
   position: absolute;
   top: 15px;
   color: #828997;
-
 `;
 
 const Input = styled.div`
@@ -27,8 +26,7 @@ const Input = styled.div`
   max-height: 100px;
   width: 100%;
   max-width: inherit;
-  color: ${(p) =>
-    p.theme.state === "light" ? p.theme.colorAccent : p.theme.colorAccentText};
+  color: ${(p) => (p.theme.state === "light" ? p.theme.colorAccent : p.theme.colorAccentText)};
   font-family: inherit;
   word-wrap: break-word;
   white-space: pre-wrap;
@@ -50,22 +48,11 @@ interface Props extends React.ComponentPropsWithoutRef<"div"> {
   value: string;
 }
 
-const TextBox = forwardRef<HTMLDivElement, Props>(
-  ({ value, placeholder, onChange, ...props }, ref) => {
-    return (
-      <Container>
-        <Placeholder aria-hidden={value.length > 0}>{placeholder}</Placeholder>
-        <Input
-          ref={ref}
-          role="textbox"
-          spellCheck
-          contentEditable
-          onInput={onChange}
-          {...props}
-        ></Input>
-      </Container>
-    );
-  }
-);
+const TextBox = forwardRef<HTMLDivElement, Props>(({ value, placeholder, onChange, ...props }, ref) => (
+  <Container>
+    <Placeholder aria-hidden={value.length > 0}>{placeholder}</Placeholder>
+    <Input ref={ref} role="textbox" spellCheck contentEditable onInput={onChange} {...props} />
+  </Container>
+));
 
 export default TextBox;

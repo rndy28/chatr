@@ -54,9 +54,8 @@ const baseInput = css<{ elementSize: Size; variant: Variant }>`
 
 const StyledInput = styled.input<{ elementSize: Size; variant: Variant }>`
   ${baseInput}
-  ${(p) =>
-    p["aria-invalid"] &&
-    css`
+  ${(p) => p["aria-invalid"]
+    && css`
       border-color: #bf616a;
     `}
 `;
@@ -78,14 +77,12 @@ const Wrapper = styled.div<{
     border-radius: 0;
     padding-inline: 0;
   }
-  ${(p) =>
-    p.invalid &&
-    css`
+  ${(p) => p.invalid
+    && css`
       border-color: #bf616a !important;
     `}
-  ${(p) =>
-    p.position === "right" &&
-    css`
+  ${(p) => p.position === "right"
+    && css`
       flex-direction: row-reverse;
     `}
 `;
@@ -96,11 +93,13 @@ interface Props extends React.ComponentPropsWithoutRef<"input"> {
   withIcon?: {
     position: Position;
   };
-  cssProps?: CSSProp<any>
+  cssProps?: CSSProp<any>;
 }
 
 const Input = forwardRef<HTMLInputElement, Props>(
-  ({ children, withIcon, elementSize, variant, cssProps,...props }, ref) => {
+  ({
+    children, withIcon, elementSize, variant, cssProps, ...props
+  }, ref) => {
     if (withIcon) {
       return (
         <Wrapper
@@ -119,17 +118,16 @@ const Input = forwardRef<HTMLInputElement, Props>(
           />
         </Wrapper>
       );
-    } else {
-      return (
-        <StyledInput
-          ref={ref}
-          elementSize={elementSize}
-          variant={variant}
-          {...props}
-        />
-      );
     }
-  }
+    return (
+      <StyledInput
+        ref={ref}
+        elementSize={elementSize}
+        variant={variant}
+        {...props}
+      />
+    );
+  },
 );
 
 export default Input;

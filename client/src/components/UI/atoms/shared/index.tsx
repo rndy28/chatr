@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import React from "react";
 
 type FlexT = {
   direction: React.CSSProperties["flexDirection"];
@@ -11,12 +12,12 @@ type FlexT = {
 
 export const Flex = styled.div<Partial<FlexT>>`
   display: flex;
-  flex-direction: ${p => p.direction};
-  justify-content: ${p => p.justifyContent};
-  align-items: ${p => p.alignItems};
-  gap: ${p => p.gap}rem;
-  flex-wrap: ${p => p.flexWrap};
-  flex: ${p => p.flex};
+  flex-direction: ${(p) => p.direction};
+  justify-content: ${(p) => p.justifyContent};
+  align-items: ${(p) => p.alignItems};
+  gap: ${(p) => p.gap}rem;
+  flex-wrap: ${(p) => p.flexWrap};
+  flex: ${(p) => p.flex};
 `;
 
 export const ellipsis = css`

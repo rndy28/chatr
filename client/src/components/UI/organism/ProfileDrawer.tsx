@@ -5,16 +5,17 @@ import Error from "components/UI/atoms/Error";
 import Input from "components/UI/atoms/Input";
 import Label from "components/UI/atoms/Label";
 import Profile from "components/UI/atoms/Profile";
+import { Flex } from "components/UI/atoms/shared";
 import Menu from "components/UI/molecules/Menu";
 import { AnimatePresence, motion } from "framer-motion";
 import { inputIconVariant } from "libs/animation";
 import { ASSETS_PATH } from "libs/constants";
 import { useUser } from "libs/contexts/UserContext";
 import { localStorageSet } from "libs/helpers";
-import { useContextMenu } from "libs/hooks/useContextMenu";
-import { useCallback, useRef, useState } from "react";
+import useContextMenu from "libs/hooks/useContextMenu";
+import { IUser } from "libs/types";
+import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
-import { Flex } from "../atoms/shared";
 
 const Form = styled.form`
   display: flex;
@@ -41,7 +42,7 @@ type Props = {
 
 const ProfileDrawer = ({ onClose }: Props) => {
   const { user, setUser } = useUser();
-  const [updatedUser, setUpdatedUser] = useState(user!);
+  const [updatedUser, setUpdatedUser] = useState<IUser>(user!);
   const [inputFieldFocus, setInputFieldFocus] = useState({
     username: false,
     status: false,
@@ -52,7 +53,7 @@ const ProfileDrawer = ({ onClose }: Props) => {
     status: "",
   });
   const [thumbnailProfile, setThumbnailProfile] = useState<string | null>(
-    user!.profile ? ASSETS_PATH + user!.profile : null
+    user!.profile ? ASSETS_PATH + user!.profile : null,
   );
 
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -64,73 +65,68 @@ const ProfileDrawer = ({ onClose }: Props) => {
   });
   const [anchorPoint, show] = useContextMenu(profileRef, menuRef);
 
-  const onFocus = (name: keyof typeof inputFieldFocus) => {
-    return () => {
-      if (name === "username") {
-        setInputFieldFocus((prev) => ({
-          ...prev,
-          username: true,
-        }));
-      } else {
-        setInputFieldFocus((prev) => ({
-          ...prev,
-          status: true,
-        }));
-      }
-    };
+  const onFocus = (name: keyof typeof inputFieldFocus) => () => {
+    if (name === "username") {
+      setInputFieldFocus((prev) => ({
+        ...prev,
+        username: true,
+      }));
+    } else {
+      setInputFieldFocus((prev) => ({
+        ...prev,
+        status: true,
+      }));
+    }
   };
 
-  const onSave = (name: keyof typeof inputFieldFocus) => {
-    return async () => {
-      if (!formRef.current) return;
+  const onSave = (name: keyof typeof inputFieldFocus) => async () => {
+    if (!formRef.current) return;
 
-      const formData = new FormData(formRef.current);
+    const formData = new FormData(formRef.current);
 
-      if (name === "username") {
-        setErrors((prev) => ({
-          ...prev,
-          username: "",
-        }));
-        setInputFieldFocus((prev) => ({
-          ...prev,
-          username: false,
-        }));
-        initialIconAnimation.current.username = "hidden";
-      } else {
-        setErrors((prev) => ({
-          ...prev,
-          status: "",
-        }));
+    if (name === "username") {
+      setErrors((prev) => ({
+        ...prev,
+        username: "",
+      }));
+      setInputFieldFocus((prev) => ({
+        ...prev,
+        username: false,
+      }));
+      initialIconAnimation.current.username = "hidden";
+    } else {
+      setErrors((prev) => ({
+        ...prev,
+        status: "",
+      }));
 
-        setInputFieldFocus((prev) => ({
-          ...prev,
-          status: false,
-        }));
-        initialIconAnimation.current.status = "hidden";
-      }
+      setInputFieldFocus((prev) => ({
+        ...prev,
+        status: false,
+      }));
+      initialIconAnimation.current.status = "hidden";
+    }
 
-      if (!updatedUser.username || !updatedUser.status) return;
-      if (
-        user!.username === updatedUser.username &&
-        user!.status === updatedUser.status
-      )
-        return;
+    if (!updatedUser.username || !updatedUser.status) return;
+    if (user!.username === updatedUser.username && user!.status === updatedUser.status) return;
 
-      const res = await updateUserProfile(formData);
+    const res = await updateUserProfile(formData);
 
-      if (res.status === 200) {
-        setUser(res.data);
-        localStorageSet("user", res.data);
-      }
-    };
+    if (res.status === 200) {
+      setUser(res.data);
+      localStorageSet("user", res.data);
+    }
   };
 
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
-      setUpdatedUser((prev) => ({ ...prev, [name]: value }));
+      setUpdatedUser((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
     },
-    [updatedUser]
+    [updatedUser],
   );
 
   const onImageChange = useCallback(
@@ -170,7 +166,7 @@ const ProfileDrawer = ({ onClose }: Props) => {
         }
       }
     },
-    [updatedUser]
+    [updatedUser],
   );
 
   const onEnter = useCallback(
@@ -179,7 +175,7 @@ const ProfileDrawer = ({ onClose }: Props) => {
         onSave(e.currentTarget.name as keyof typeof inputFieldFocus);
       }
     },
-    [inputFieldFocus, updatedUser]
+    [inputFieldFocus, updatedUser],
   );
 
   const removeProfile = useCallback(async () => {
@@ -199,6 +195,7 @@ const ProfileDrawer = ({ onClose }: Props) => {
         <Flex direction="column" alignItems="center">
           {thumbnailProfile ? (
             <Profile
+              username={updatedUser.username}
               picture={thumbnailProfile}
               ref={profileRef}
               className="profile"
@@ -209,6 +206,7 @@ const ProfileDrawer = ({ onClose }: Props) => {
             />
           ) : (
             <Profile
+              username={updatedUser.username}
               ref={profileRef}
               className="profile"
               css={`
@@ -238,8 +236,7 @@ const ProfileDrawer = ({ onClose }: Props) => {
               color: #f0513c;
             `}
           >
-            note: iam disabling profile feature because i cant pay for aws s3 to store
-            the images
+            note: iam disabling profile feature because i cant pay for aws s3 to store the images
           </span>
           <AnimatePresence>
             {show && (
@@ -285,11 +282,13 @@ const ProfileDrawer = ({ onClose }: Props) => {
             autoComplete="off"
             elementSize="md"
             variant="neutral"
-            withIcon={{ position: "right" }}
+            withIcon={{
+              position: "right",
+            }}
             placeholder="type your username"
             value={updatedUser.username}
             aria-errormessage="username-error"
-            aria-invalid={errors.username ? true : false}
+            aria-invalid={!!errors.username}
             onChange={onChange}
             onKeyDown={onEnter}
             ref={(ref) => inputFieldFocus.username && ref?.focus()}
@@ -325,9 +324,7 @@ const ProfileDrawer = ({ onClose }: Props) => {
               )}
             </AnimatePresence>
           </Input>
-          {errors.username && (
-            <Error id="username-error">{errors.username}</Error>
-          )}
+          {errors.username && <Error id="username-error">{errors.username}</Error>}
         </Group>
         <Group
           css={`
@@ -351,11 +348,13 @@ const ProfileDrawer = ({ onClose }: Props) => {
             autoComplete="off"
             elementSize="md"
             variant="neutral"
-            withIcon={{ position: "right" }}
+            withIcon={{
+              position: "right",
+            }}
             placeholder="type your status"
             value={updatedUser.status}
             aria-errormessage="status-error"
-            aria-invalid={errors.status ? true : false}
+            aria-invalid={!!errors.status}
             onChange={onChange}
             onKeyDown={onEnter}
             ref={(ref) => inputFieldFocus.status && ref?.focus()}

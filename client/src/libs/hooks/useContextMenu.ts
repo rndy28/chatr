@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 type AnchorPoint = {
   y: number;
   x: number;
 };
 
-export const useContextMenu = <RefType extends HTMLElement>(
+const useContextMenu = <RefType extends HTMLElement>(
   ref: React.RefObject<RefType>,
-  menuRef: React.RefObject<RefType>
+  menuRef: React.RefObject<RefType>,
 ): [AnchorPoint, boolean] => {
   const [show, setShow] = useState(false);
   const [anchorPoint, setAnchorPoint] = useState({
@@ -18,20 +18,19 @@ export const useContextMenu = <RefType extends HTMLElement>(
   const handleClick = useCallback(
     (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      const containsMenu =
-        menuRef.current && menuRef.current.contains(target as Node);
-      if (
-        (ref.current && ref.current.contains(target as Node)) ||
-        containsMenu
-      ) {
+      const containsMenu = menuRef.current && menuRef.current.contains(target as Node);
+      if ((ref.current && ref.current.contains(target as Node)) || containsMenu) {
         if (containsMenu) return;
-        setAnchorPoint({ x: event.pageX, y: event.pageY });
+        setAnchorPoint({
+          x: event.pageX,
+          y: event.pageY,
+        });
         setShow((c) => !c);
       } else {
         setShow(false);
       }
     },
-    [setShow, setAnchorPoint]
+    [setShow, setAnchorPoint],
   );
 
   const onEscape = (e: KeyboardEvent) => {
@@ -52,3 +51,5 @@ export const useContextMenu = <RefType extends HTMLElement>(
 
   return [anchorPoint, show];
 };
+
+export default useContextMenu;

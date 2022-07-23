@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { motion, HTMLMotionProps } from "framer-motion";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 
 const Container = styled(motion.div)`
   width: fit-content;
@@ -61,7 +61,7 @@ const Menu = ({ children, menuRef, anchorPoint, ...props }: Props) => {
         },
       },
     }),
-    [anchorPoint]
+    [anchorPoint],
   );
 
   return (

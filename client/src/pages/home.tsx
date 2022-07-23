@@ -13,7 +13,7 @@ const Home = () => {
     (user: IUser) => {
       setConversationWith(user);
     },
-    [conversationWith]
+    [conversationWith],
   );
 
   const clearConversation = useCallback(() => {

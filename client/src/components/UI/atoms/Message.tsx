@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { motion, HTMLMotionProps } from "framer-motion";
 import ReactTimeAgo from "react-time-ago";
 
+type MessageType = "in" | "out";
+
 const Container = styled(motion.div)<{ type: MessageType }>`
   margin-left: ${({ type }) => (type === "in" ? "0" : "auto")};
   position: relative;
@@ -42,8 +44,6 @@ interface Props extends HTMLMotionProps<"div"> {
   text: string;
   sent: number;
 }
-
-type MessageType = "in" | "out";
 
 const Message = ({ text, type, sent, ...props }: Props) => {
   const date = new Date(sent * 1000);

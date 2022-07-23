@@ -1,10 +1,12 @@
 import { getContacts } from "api";
 import Drawer from "components/templates/Drawer";
+import Loader from "components/UI/atoms/Loader";
 import Contact from "components/UI/molecules/Contact";
 import SearchBar from "components/UI/molecules/SearchBar";
-import { useDebouncedQuery } from "libs/hooks/useDebouncedQuery";
+import useDebouncedQuery from "libs/hooks/useDebouncedQuery";
 import type { IUser } from "libs/types";
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -23,26 +25,32 @@ type Props = {
 const ContactDrawer = ({ onClose, setConversation }: Props) => {
   const [contacts, setContacts] = useState<IUser[]>([]);
   const [query, onDebouncedQuery] = useDebouncedQuery();
+  const { data: response, status } = useQuery(["contacts"], getContacts);
 
-  const onConversationWithContact = (contact: IUser) => {
-    return () => {
-      setConversation(contact);
-      onClose();
-    };
+  const onConversationWithContact = (contact: IUser) => () => {
+    setConversation(contact);
+    onClose();
   };
 
   useEffect(() => {
-    (async () => {
-      const { data } = await getContacts();
-      setContacts(data);
-    })();
-
+    if (status === "success") {
+      setContacts(response.data);
+    }
     return () => {
       setContacts([]);
     };
-  }, []);
+  }, [status]);
 
-  const filteredContacts = contacts.filter(contact => contact.username.toLowerCase().includes(query.toLowerCase()))
+  // eslint-disable-next-line max-len
+  const filteredContacts = contacts.filter((contact) => contact.username.toLowerCase().includes(query.toLowerCase()));
+
+  if (status === "loading") {
+    return (
+      <Drawer title="Contact" onHide={onClose}>
+        <Loader size="md" />
+      </Drawer>
+    );
+  }
 
   return (
     <Drawer title="Contact" onHide={onClose}>

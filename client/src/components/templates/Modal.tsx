@@ -1,7 +1,8 @@
-import { motion } from "framer-motion";
+import { motion, HTMLMotionProps } from "framer-motion";
 import { modalVariant } from "libs/animation";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
+import React from "react";
 
 const Container = styled(motion.div)`
   position: fixed;
@@ -26,28 +27,17 @@ const Title = styled.h1`
   font-size: 1.5rem;
 `;
 
-type Props = {
-  children: React.ReactNode;
-};
+interface Props extends HTMLMotionProps<"div"> {}
 interface PropsTitle extends React.ComponentPropsWithoutRef<"h1"> {}
 
-const Modal = ({ children }: Props) => {
-  return createPortal(
-    <Container
-      role="dialog"
-      variants={modalVariant}
-      initial="hidden"
-      animate="visible"
-      exit="hidden"
-    >
+const Modal = ({ children, ...props }: Props) =>
+  createPortal(
+    <Container role="dialog" variants={modalVariant} initial="hidden" animate="visible" exit="hidden" {...props}>
       {children}
     </Container>,
-    document.getElementById("root")!
+    document.getElementById("root")!,
   );
-};
 
-Modal.Title = ({ children, ...rest }: PropsTitle) => {
-  return <Title {...rest}>{children}</Title>;
-};
+Modal.Title = ({ children, ...rest }: PropsTitle) => <Title {...rest}>{children}</Title>;
 
 export default Modal;

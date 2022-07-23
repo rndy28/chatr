@@ -3,6 +3,7 @@ import { ellipsis, Flex } from "components/UI/atoms/shared";
 import { ASSETS_PATH } from "libs/constants";
 import { IUser } from "libs/types";
 import styled from "styled-components";
+import React from "react";
 
 const Container = styled.li`
   display: flex;
@@ -36,27 +37,25 @@ const Status = styled.span`
 
 interface Props extends React.ComponentPropsWithoutRef<"li">, IUser {}
 
-const Contact = ({ status, profile, username, ...props }: Props) => {
-  return (
-    <Container {...props}>
-      {profile ? (
-        <Profile picture={ASSETS_PATH +profile} size="lg" />
-      ) : (
-        <Profile size="lg" />
-      )}
-      <Flex
-        direction="column"
-        justifyContent="center"
-        css={`
-          position: relative;
-          top: 2px;
-        `}
-      >
-        <Title>{username}</Title>
-        <Status>{status}</Status>
-      </Flex>
-    </Container>
-  );
-};
+const Contact = ({ status, profile, username, ...props }: Props) => (
+  <Container {...props}>
+    {profile ? (
+      <Profile username={username} picture={ASSETS_PATH + profile} size="lg" />
+    ) : (
+      <Profile username={username} size="lg" />
+    )}
+    <Flex
+      direction="column"
+      justifyContent="center"
+      css={`
+        position: relative;
+        top: 2px;
+      `}
+    >
+      <Title>{username}</Title>
+      <Status>{status}</Status>
+    </Flex>
+  </Container>
+);
 
 export default Contact;

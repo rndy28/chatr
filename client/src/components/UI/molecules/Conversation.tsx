@@ -76,9 +76,9 @@ const Conversation = ({
   return (
     <Container {...props}>
       {profile ? (
-        <Profile picture={ASSETS_PATH + profile} size="md" />
+        <Profile username={from} picture={ASSETS_PATH + profile} size="md" />
       ) : (
-        <Profile size="md" />
+        <Profile username={from} size="md" />
       )}
       <Flex
         justifyContent="space-between"

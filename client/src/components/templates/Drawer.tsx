@@ -2,13 +2,14 @@ import IconMapper from "components/UI/atoms/IconMapper";
 import { motion } from "framer-motion";
 import { drawerVariant } from "libs/animation";
 import styled from "styled-components";
+import React from "react";
 
 const Container = styled(motion.div)`
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
-  height: 100%;
+  height: 45rem;
   background-color: #fff;
   max-width: 30rem;
   @media (min-width: 768px) {
@@ -40,21 +41,26 @@ type Props = {
   onHide: () => void;
 };
 
-const Drawer = ({ children, title, onHide }: Props) => {
-  return (
-    <Container
-      variants={drawerVariant}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-    >
-      <Header>
-        <IconMapper name="back" role="button" onClick={onHide} css={`color: inherit;`}/>
-        <Title>{title}</Title>
-      </Header>
-      {children}
-    </Container>
-  );
-};
+const Drawer = ({ children, title, onHide }: Props) => (
+  <Container
+    variants={drawerVariant}
+    initial="hidden"
+    animate="visible"
+    exit="exit"
+  >
+    <Header>
+      <IconMapper
+        name="back"
+        role="button"
+        onClick={onHide}
+        css={`
+            color: inherit;
+          `}
+      />
+      <Title>{title}</Title>
+    </Header>
+    {children}
+  </Container>
+);
 
 export default Drawer;

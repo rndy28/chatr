@@ -1,15 +1,16 @@
+import { addContact } from "api";
 import Modal from "components/templates/Modal";
 import Button from "components/UI/atoms/Button";
+import Error from "components/UI/atoms/Error";
 import IconMapper from "components/UI/atoms/IconMapper";
 import Input from "components/UI/atoms/Input";
 import Label from "components/UI/atoms/Label";
-import Error from "components/UI/atoms/Error";
 import { Flex } from "components/UI/atoms/shared";
 import { motion } from "framer-motion";
 import { formInModalVariant } from "libs/animation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "react-query";
 import styled from "styled-components";
-import { addContact } from "api";
 
 const Container = styled(motion.form)`
   padding: 1rem;
@@ -31,12 +32,25 @@ type Props = {
 const ContactFormModal = ({ onModalClose }: Props) => {
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
+  const { isLoading, mutateAsync } = useMutation(addContact, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["contacts"], {
+        exact: true,
+        refetchType: "inactive",
+      });
+    },
+  });
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (username.length === 0) return setError("username is required");
-    setLoading(true);
-    const { data } = await addContact({ username });
+    if (username.length === 0) {
+      setError("username is required");
+      return;
+    }
+    const { data } = await mutateAsync({
+      username,
+    });
 
     if ("field" in data) {
       const message = data["message" as keyof typeof data] as string;
@@ -44,7 +58,6 @@ const ContactFormModal = ({ onModalClose }: Props) => {
     } else {
       onModalClose();
     }
-    setLoading(false);
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,13 +72,7 @@ const ContactFormModal = ({ onModalClose }: Props) => {
 
   return (
     <Modal>
-      <Container
-        variants={formInModalVariant}
-        initial="hidden"
-        animate="visible"
-        exit="hidden"
-        onSubmit={handleSubmit}
-      >
+      <Container variants={formInModalVariant} initial="hidden" animate="visible" exit="hidden" onSubmit={handleSubmit}>
         <Flex
           alignItems="center"
           justifyContent="space-between"
@@ -101,19 +108,19 @@ const ContactFormModal = ({ onModalClose }: Props) => {
           <Input
             id="username"
             name="username"
-            aria-invalid={error ? true : false}
+            aria-invalid={!!error}
             aria-errormessage="username-error"
             elementSize="md"
             variant="secondary"
             onChange={onChange}
             autoFocus
           />
-          {error && <Error id="username-error">{error}</Error>}
+          {error && <Error id="username-error" data-testid="username-error">{error}</Error>}
         </Flex>
         <Button
           size="md"
           variant="primary"
-          loading={loading}
+          loading={isLoading}
           css={`
             max-width: 100%;
           `}

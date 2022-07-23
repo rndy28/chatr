@@ -12,16 +12,16 @@ export type MessageT = {
   sent: number;
 };
 
-export interface ISender
-  extends Omit<IUser, "username">,
-    Omit<MessageT, "to" | "isRead"> {
-  messageLength: number;
-}
-
 export interface IUser {
   username: string;
   profile: string | null;
   status: string;
+}
+
+export interface ISender
+  extends Omit<IUser, "username">,
+    Omit<MessageT, "to" | "isRead"> {
+  messageLength: number;
 }
 
 export type Size = "sm" | "md" | "lg";

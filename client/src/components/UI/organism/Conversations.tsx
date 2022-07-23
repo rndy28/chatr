@@ -8,7 +8,7 @@ import styled from "styled-components";
 const Container = styled.ul`
   background-color: inherit;
   width: 100%;
-  height: calc(100% - 12rem);
+  height: calc(100% - 10rem);
   overflow-x: hidden;
   overflow-y: auto;
 `;
@@ -23,49 +23,49 @@ const Conversations = ({ setConversation, query }: Props) => {
   const [users, setUsers] = useState<IUser[]>([]);
   const { messages, newMessages, onlineUsers } = useSocket();
 
-  const onConversation = (contact: IUser) => {
-    return () => {
-      setConversation(contact);
-    };
+  const onConversation = (contact: IUser) => () => {
+    setConversation(contact);
   };
 
   useEffect(() => {
+    if (messages.length === 0) return;
     (async () => {
       const { data } = await getUsers();
-      setUsers((prev) =>
-        JSON.stringify(prev) === JSON.stringify(data) ? prev : data
-      );
+      setUsers((prev) => (JSON.stringify(prev) === JSON.stringify(data) ? prev : data));
     })();
-  }, [onlineUsers]);
+  }, [onlineUsers, messages]);
 
   useEffect(() => {
     setSenders(
       messages.reduce((acc, message, _, arr) => {
         const sender = users.find(
-          (user) =>
-            user.username === message.from || user.username === message.to
+          (user) => user.username === message.from || user.username === message.to,
         );
         if (!sender) return acc;
 
         const exist = acc.find((c) => c.from === sender.username);
         if (!exist) {
           const senderMessage = arr.filter(
-            (m) => m.from === sender.username || m.to === sender.username
+            (m) => m.from === sender.username || m.to === sender.username,
           );
           acc.push({
             from: sender.username,
             profile: sender.profile,
             status: sender.status,
-            text: senderMessage.map((m) => m.text)[senderMessage.length - 1],
-            sent: senderMessage.map((m) => m.sent)[senderMessage.length - 1],
+            text: senderMessage.map((sender) => sender.text)[
+              senderMessage.length - 1
+            ],
+            sent: senderMessage.map((sender) => sender.sent)[
+              senderMessage.length - 1
+            ],
             messageLength: newMessages.filter(
-              (message) => message.from === sender.username && !message.isRead
+              (message) => message.from === sender.username && !message.isRead,
             ).length,
           });
         }
 
         return acc;
-      }, [] as ISender[])
+      }, [] as ISender[]),
     );
 
     return () => {
@@ -74,9 +74,8 @@ const Conversations = ({ setConversation, query }: Props) => {
   }, [messages, newMessages, users]);
 
   const filteredSenders = senders.filter(
-    (sender) =>
-      sender.from.toLowerCase().includes(query.toLowerCase()) ||
-      sender.text.toLowerCase().includes(query.toLowerCase())
+    (sender) => sender.from.toLowerCase().includes(query.toLowerCase())
+      || sender.text.toLowerCase().includes(query.toLowerCase()),
   );
 
   return (

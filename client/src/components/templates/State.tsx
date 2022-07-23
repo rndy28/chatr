@@ -35,15 +35,13 @@ type Props = {
   description?: string;
 };
 
-const State = ({ title, description }: Props) => {
-  return (
-    <Container>
-      <Flex direction="column" alignItems="center">
-        <Title>{title}</Title>
-        <Description>{description}</Description>
-      </Flex>
-    </Container>
-  );
-};
+const State = ({ title, description }: Props) => (
+  <Container>
+    <Flex direction="column" alignItems="center">
+      <Title>{title}</Title>
+      <Description>{description}</Description>
+    </Flex>
+  </Container>
+);
 
 export default State;

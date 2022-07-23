@@ -1,21 +1,16 @@
-
 import { useUser } from "libs/contexts/UserContext";
-import { Outlet, Navigate } from 'react-router-dom';
-
+import { Outlet, Navigate } from "react-router-dom";
 
 const Protected = () => {
-    const { user } = useUser();
+  const { user } = useUser();
 
-    return user ? <Outlet /> : <Navigate to='/signin' />;
+  return user ? <Outlet /> : <Navigate to="/signin" />;
 };
 
 const Public = () => {
-    const { user } = useUser();
+  const { user } = useUser();
 
-    return !user ? <Outlet /> : user.username !== '' ? <Navigate to='/' /> : <Navigate to='/get-started' />;
+  return !user ? <Outlet /> : <Navigate to="/get-started" />;
 };
 
-export {
-    Protected,
-    Public
-};
+export { Protected, Public };

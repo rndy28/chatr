@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import { IconEye, IconEyeOff } from "@tabler/icons";
 import { signup } from "api";
 import Button from "components/UI/atoms/Button";
@@ -7,8 +8,8 @@ import Label from "components/UI/atoms/Label";
 import { useSocket } from "libs/contexts/SocketContext";
 import { useUser } from "libs/contexts/UserContext";
 import { localStorageSet } from "libs/helpers";
-import { useChangePasswordType } from "libs/hooks/useChangePasswordType";
-import { useEffect, useRef, useState } from "react";
+import useChangePasswordType from "libs/hooks/useChangePasswordType";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Container, Form, Group, SmallText } from "./style";
 
@@ -55,7 +56,9 @@ const SignUp = () => {
       localStorageSet("token", data.token);
       localStorageSet("user", user);
       setUser(user);
-      socket.auth = { token: data.token };
+      socket.auth = {
+        token: data.token,
+      };
       socket.connect();
       navigate("/");
     }
@@ -63,7 +66,10 @@ const SignUp = () => {
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAuthUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setAuthUser((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const handleError = () => {
@@ -117,12 +123,12 @@ const SignUp = () => {
             name="username"
             elementSize="lg"
             variant="primary"
-            aria-invalid={errors.username ? true : false}
+            aria-invalid={!!errors.username}
             aria-errormessage="username-error"
             onChange={onChange}
           />
           {errors.username && (
-            <Error id="username-error">{errors.username}</Error>
+            <Error id="username-error" data-testid="username-error">{errors.username}</Error>
           )}
         </Group>
         <Group>
@@ -133,21 +139,27 @@ const SignUp = () => {
             elementSize="lg"
             variant="primary"
             type={passwordType}
-            aria-invalid={errors.password ? true : false}
+            aria-invalid={!!errors.password}
             aria-errormessage="password-error"
-            withIcon={{ position: "right" }}
+            withIcon={{
+              position: "right",
+            }}
             onChange={onChange}
           >
             {passwordType === "password" ? (
               <IconEye
                 color="#4C566A"
-                style={{ cursor: "pointer" }}
+                style={{
+                  cursor: "pointer",
+                }}
                 onClick={togglePasswordType}
               />
             ) : (
               <IconEyeOff
                 color="#4C566A"
-                style={{ cursor: "pointer" }}
+                style={{
+                  cursor: "pointer",
+                }}
                 onClick={togglePasswordType}
               />
             )}

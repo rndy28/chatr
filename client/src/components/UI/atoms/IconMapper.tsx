@@ -7,7 +7,7 @@ import {
   IconSend,
   IconX,
 } from "@tabler/icons";
-import { forwardRef } from "react";
+import React, { forwardRef } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -35,56 +35,54 @@ interface Props extends React.ComponentPropsWithoutRef<"div"> {
   name: string;
 }
 
-const IconMapper = forwardRef<HTMLDivElement, Props>(
-  ({ name, ...props }, ref) => {
-    switch (name) {
-      case "dots-vertical":
-      case "options":
-        return (
-          <Wrapper ref={ref} {...props}>
-            <IconDotsVertical />
-          </Wrapper>
-        );
-      case "message":
-        return (
-          <Wrapper ref={ref} {...props}>
-            <IconMessage />
-          </Wrapper>
-        );
-      case "search":
-        return (
-          <Wrapper ref={ref} {...props}>
-            <IconSearch />
-          </Wrapper>
-        );
-      case "send":
-        return (
-          <Wrapper ref={ref} {...props}>
-            <IconSend />
-          </Wrapper>
-        );
-      case "close":
-        return (
-          <Wrapper ref={ref} {...props}>
-            <IconX />
-          </Wrapper>
-        );
-      case "back":
-        return (
-          <Wrapper ref={ref} {...props}>
-            <IconArrowNarrowLeft />
-          </Wrapper>
-        );
-      case "check":
-        return (
-          <Wrapper ref={ref} {...props}>
-            <IconCheck />
-          </Wrapper>
-        );
-      default:
-        throw new Error(`Unknown icon name: ${name}`);
-    }
+const IconMapper = forwardRef<HTMLDivElement, Props>(({ name, ...props }, ref) => {
+  switch (name) {
+    case "dots-vertical":
+    case "options":
+      return (
+        <Wrapper ref={ref} {...props}>
+          <IconDotsVertical />
+        </Wrapper>
+      );
+    case "message":
+      return (
+        <Wrapper ref={ref} {...props}>
+          <IconMessage />
+        </Wrapper>
+      );
+    case "search":
+      return (
+        <Wrapper ref={ref} {...props}>
+          <IconSearch />
+        </Wrapper>
+      );
+    case "send":
+      return (
+        <Wrapper ref={ref} {...props}>
+          <IconSend />
+        </Wrapper>
+      );
+    case "close":
+      return (
+        <Wrapper ref={ref} {...props}>
+          <IconX />
+        </Wrapper>
+      );
+    case "back":
+      return (
+        <Wrapper ref={ref} {...props}>
+          <IconArrowNarrowLeft />
+        </Wrapper>
+      );
+    case "check":
+      return (
+        <Wrapper ref={ref} {...props}>
+          <IconCheck />
+        </Wrapper>
+      );
+    default:
+      throw new Error(`Unknown icon name: ${name}`);
   }
-);
+});
 
 export default IconMapper;
