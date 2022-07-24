@@ -178,7 +178,7 @@ const SignIn = () => {
           Sign In
         </Button>
         <SmallText>
-          Dont have an account? <Link to="/signin">Sign In</Link>
+          Dont have an account? <Link to="/signup">Sign Up</Link>
         </SmallText>
       </Form>
     </Container>
