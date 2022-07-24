@@ -42,7 +42,9 @@ const ContactDrawer = ({ onClose, setConversation }: Props) => {
   }, [status]);
 
   // eslint-disable-next-line max-len
-  const filteredContacts = contacts.filter((contact) => contact.username.toLowerCase().includes(query.toLowerCase()));
+  const filteredContacts = contacts.filter((contact) =>
+    contact.username.toLowerCase().includes(query.toLowerCase()),
+  );
 
   if (status === "loading") {
     return (

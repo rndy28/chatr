@@ -53,7 +53,13 @@ const Profile = forwardRef<HTMLDivElement, Props | ContainerProps>((props, ref) 
       <img src={props.picture} alt={`${props.username} Profile`} />
     </Container>
   ) : (
-    <Wrapper {...props} role="img" aria-label={`${props.username} Profile`} ref={ref} data-testid="profile-picture">
+    <Wrapper
+      {...props}
+      role="img"
+      aria-label={`${props.username} Profile`}
+      ref={ref}
+      data-testid="profile-picture"
+    >
       <svg viewBox="0 0 212 212">
         <path
           fill="#DFE5E7"

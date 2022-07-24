@@ -76,9 +76,7 @@ export const addContact = async (payload: {
   }
 };
 
-export const updateUserProfile = async (
-  payload: FormData,
-): Promise<AxiosResponse<IUser>> => {
+export const updateUserProfile = async (payload: FormData): Promise<AxiosResponse<IUser>> => {
   try {
     const response = await instance.patch("users/profile", payload);
     return response;
@@ -87,12 +85,9 @@ export const updateUserProfile = async (
   }
 };
 
-export const deleteUserProfilePicture = async (): Promise<
-  AxiosResponse<IUser>
-> => {
+export const deleteUserProfilePicture = async (): Promise<AxiosResponse<IUser>> => {
   try {
-    const response = await instance.patch("users/profile/delete", {
-    });
+    const response = await instance.patch("users/profile/delete", {});
     return response;
   } catch (error: any) {
     return error.response;

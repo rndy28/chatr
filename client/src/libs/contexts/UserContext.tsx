@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { createCtx, localStorageGet } from "libs/helpers";
 import type { IUser } from "libs/types";
 
@@ -12,16 +12,9 @@ const [useUser, Provider] = createCtx<UserContextT>();
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState(localStorageGet<IUser | undefined>("user"));
 
-  return (
-    <Provider
-      value={{
-        setUser,
-        user,
-      }}
-    >
-      {children}
-    </Provider>
-  );
+  const value = useMemo(() => ({ setUser, user }), [user]);
+
+  return <Provider value={value}>{children}</Provider>;
 };
 
 export { useUser, UserProvider };

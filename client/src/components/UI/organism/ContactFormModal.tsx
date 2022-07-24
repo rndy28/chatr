@@ -72,7 +72,13 @@ const ContactFormModal = ({ onModalClose }: Props) => {
 
   return (
     <Modal>
-      <Container variants={formInModalVariant} initial="hidden" animate="visible" exit="hidden" onSubmit={handleSubmit}>
+      <Container
+        variants={formInModalVariant}
+        initial="hidden"
+        animate="visible"
+        exit="hidden"
+        onSubmit={handleSubmit}
+      >
         <Flex
           alignItems="center"
           justifyContent="space-between"
@@ -115,7 +121,11 @@ const ContactFormModal = ({ onModalClose }: Props) => {
             onChange={onChange}
             autoFocus
           />
-          {error && <Error id="username-error" data-testid="username-error">{error}</Error>}
+          {error && (
+            <Error id="username-error" data-testid="username-error">
+              {error}
+            </Error>
+          )}
         </Flex>
         <Button
           size="md"

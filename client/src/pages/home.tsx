@@ -22,25 +22,15 @@ const Home = () => {
 
   return (
     <Layout>
-      <Sidebar
-        setConversation={setConversation}
-        conversationWith={conversationWith}
-      />
+      <Sidebar setConversation={setConversation} conversationWith={conversationWith} />
       <AnimatePresence>
         {conversationWith && (
-          <Main
-            conversationWith={conversationWith}
-            clearConversation={clearConversation}
-          />
+          <Main conversationWith={conversationWith} clearConversation={clearConversation} />
         )}
       </AnimatePresence>
       <AnimatePresence>
         {!conversationWith && (
-          <State
-            title="Chatr"
-            description="Start chatting with your friends"
-            key="state"
-          />
+          <State title="Chatr" description="Start chatting with your friends" key="state" />
         )}
       </AnimatePresence>
     </Layout>

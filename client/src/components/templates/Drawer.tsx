@@ -42,20 +42,15 @@ type Props = {
 };
 
 const Drawer = ({ children, title, onHide }: Props) => (
-  <Container
-    variants={drawerVariant}
-    initial="hidden"
-    animate="visible"
-    exit="exit"
-  >
+  <Container variants={drawerVariant} initial="hidden" animate="visible" exit="exit">
     <Header>
       <IconMapper
         name="back"
         role="button"
         onClick={onHide}
         css={`
-            color: inherit;
-          `}
+          color: inherit;
+        `}
       />
       <Title>{title}</Title>
     </Header>

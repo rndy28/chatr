@@ -92,10 +92,4 @@ const inputIconVariant: Variants = {
   },
 };
 
-export {
-  drawerVariant,
-  modalVariant,
-  formInModalVariant,
-  mainVariant,
-  inputIconVariant,
-};
+export { drawerVariant, modalVariant, formInModalVariant, mainVariant, inputIconVariant };

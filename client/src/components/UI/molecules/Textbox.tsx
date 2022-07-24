@@ -48,11 +48,13 @@ interface Props extends React.ComponentPropsWithoutRef<"div"> {
   value: string;
 }
 
-const TextBox = forwardRef<HTMLDivElement, Props>(({ value, placeholder, onChange, ...props }, ref) => (
-  <Container>
-    <Placeholder aria-hidden={value.length > 0}>{placeholder}</Placeholder>
-    <Input ref={ref} role="textbox" spellCheck contentEditable onInput={onChange} {...props} />
-  </Container>
-));
+const TextBox = forwardRef<HTMLDivElement, Props>(
+  ({ value, placeholder, onChange, ...props }, ref) => (
+    <Container>
+      <Placeholder aria-hidden={value.length > 0}>{placeholder}</Placeholder>
+      <Input ref={ref} role="textbox" spellCheck contentEditable onInput={onChange} {...props} />
+    </Container>
+  ),
+);
 
 export default TextBox;

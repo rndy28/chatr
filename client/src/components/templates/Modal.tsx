@@ -32,7 +32,14 @@ interface PropsTitle extends React.ComponentPropsWithoutRef<"h1"> {}
 
 const Modal = ({ children, ...props }: Props) =>
   createPortal(
-    <Container role="dialog" variants={modalVariant} initial="hidden" animate="visible" exit="hidden" {...props}>
+    <Container
+      role="dialog"
+      variants={modalVariant}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+      {...props}
+    >
       {children}
     </Container>,
     document.getElementById("root")!,

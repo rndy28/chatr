@@ -16,8 +16,7 @@ const Container = styled.div<{ size: Size }>`
     width: ${(p) => (p.size === "lg" ? "50" : p.size === "md" ? "35" : "25")}px;
     aspect-ratio: 1;
     border-radius: 50%;
-    border: ${(p) => (p.size === "lg" ? "5" : p.size === "md" ? "4" : "3")}px
-      solid #0000;
+    border: ${(p) => (p.size === "lg" ? "5" : p.size === "md" ? "4" : "3")}px solid #0000;
     border-right-color: #434c5e;
     position: relative;
     animation: ${rotate} 1s infinite linear;

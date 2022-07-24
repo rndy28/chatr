@@ -7,12 +7,12 @@ const SendButton = () => (
     size="lg"
     variant="secondary"
     css={`
-        border-radius: 50%;
-        & svg {
-          position: relative;
-          right: 1px;
-        }
-      `}
+      border-radius: 50%;
+      & svg {
+        position: relative;
+        right: 1px;
+      }
+    `}
   >
     <IconSend />
   </Button>

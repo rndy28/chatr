@@ -25,7 +25,25 @@ const From = styled.h4`
   color: #434c5e;
   font-size: 1.1rem;
   ${ellipsis}
-  max-width: inherit;
+  max-width: 10rem;
+  @media (min-width: 380px) {
+    max-width: 12rem;
+  }
+  @media (min-width: 400px) {
+    max-width: 13rem;
+  }
+  @media (min-width: 420px) {
+    max-width: 14rem;
+  }
+  @media (min-width: 450px) {
+    max-width: 15rem;
+  }
+  @media (min-width: 460px) {
+    max-width: 17rem;
+  }
+  @media (min-width: 768px) {
+    max-width: 10.5rem;
+  }
 `;
 
 const LastMessage = styled.p`
@@ -64,14 +82,7 @@ const Timestamp = styled.span`
 
 interface Props extends React.ComponentPropsWithoutRef<"li">, ISender {}
 
-const Conversation = ({
-  from,
-  profile,
-  messageLength,
-  text,
-  sent,
-  ...props
-}: Props) => {
+const Conversation = ({ from, profile, messageLength, text, sent, ...props }: Props) => {
   const date = new Date(sent * 1000);
   return (
     <Container {...props}>
@@ -124,9 +135,7 @@ const Conversation = ({
             </Timestamp>
           )}
           {messageLength > 0 && (
-            <MessageLength length={messageLength}>
-              {messageLength}
-            </MessageLength>
+            <MessageLength length={messageLength}>{messageLength}</MessageLength>
           )}
         </Flex>
       </Flex>

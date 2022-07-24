@@ -20,13 +20,20 @@ interface Props extends React.ComponentPropsWithoutRef<"div"> {
 }
 
 // eslint-disable-next-line max-len
-const Messages = forwardRef<HTMLDivElement, Props>(({ messages, conversationWith, ...props }, ref) => (
-  <Container ref={ref} {...props}>
-    {messages.map(({ from, text, sent }) => (
-      <Message key={sent} type={conversationWith.username === from ? "in" : "out"} sent={sent} text={text} />
-    ))}
-  </Container>
-));
+const Messages = forwardRef<HTMLDivElement, Props>(
+  ({ messages, conversationWith, ...props }, ref) => (
+    <Container ref={ref} {...props}>
+      {messages.map(({ from, text, sent }) => (
+        <Message
+          key={sent}
+          type={conversationWith.username === from ? "in" : "out"}
+          sent={sent}
+          text={text}
+        />
+      ))}
+    </Container>
+  ),
+);
 
 const memoMessage = memo(Messages);
 

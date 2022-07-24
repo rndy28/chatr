@@ -18,9 +18,7 @@ export interface IUser {
   status: string;
 }
 
-export interface ISender
-  extends Omit<IUser, "username">,
-    Omit<MessageT, "to" | "isRead"> {
+export interface ISender extends Omit<IUser, "username">, Omit<MessageT, "to" | "isRead"> {
   messageLength: number;
 }
 

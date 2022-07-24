@@ -1,8 +1,10 @@
 import { getUsers } from "api";
+import Loader from "components/UI/atoms/Loader";
 import Conversation from "components/UI/molecules/Conversation";
 import { useSocket } from "libs/contexts/SocketContext";
 import { ISender, IUser } from "libs/types";
 import { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "react-query";
 import styled from "styled-components";
 
 const Container = styled.ul`
@@ -22,18 +24,27 @@ const Conversations = ({ setConversation, query }: Props) => {
   const [senders, setSenders] = useState<ISender[]>([]);
   const [users, setUsers] = useState<IUser[]>([]);
   const { messages, newMessages, onlineUsers } = useSocket();
+  const { data: response, status, isRefetching } = useQuery(["users"], getUsers);
+  const queryClient = useQueryClient();
 
   const onConversation = (contact: IUser) => () => {
     setConversation(contact);
   };
 
+  //! perf problem: everytime theres a message comming in, client will refetching users again (imagine if we have 10000 users)
+  //! possible solution: send user data along with message from backend
+
+  //! this will introduce another problem, because payload will be objected, due to user data addition
+
   useEffect(() => {
     if (messages.length === 0) return;
-    (async () => {
-      const { data } = await getUsers();
-      setUsers((prev) => (JSON.stringify(prev) === JSON.stringify(data) ? prev : data));
-    })();
-  }, [onlineUsers, messages]);
+    if (status === "success") {
+      setUsers((prev) =>
+        JSON.stringify(prev) === JSON.stringify(response) ? prev : response.data,
+      );
+      console.log(response.data);
+    }
+  }, [onlineUsers, messages, status, isRefetching]);
 
   useEffect(() => {
     setSenders(
@@ -52,12 +63,8 @@ const Conversations = ({ setConversation, query }: Props) => {
             from: sender.username,
             profile: sender.profile,
             status: sender.status,
-            text: senderMessage.map((sender) => sender.text)[
-              senderMessage.length - 1
-            ],
-            sent: senderMessage.map((sender) => sender.sent)[
-              senderMessage.length - 1
-            ],
+            text: senderMessage.map((sender) => sender.text)[senderMessage.length - 1],
+            sent: senderMessage.map((sender) => sender.sent)[senderMessage.length - 1],
             messageLength: newMessages.filter(
               (message) => message.from === sender.username && !message.isRead,
             ).length,
@@ -73,10 +80,23 @@ const Conversations = ({ setConversation, query }: Props) => {
     };
   }, [messages, newMessages, users]);
 
+  useEffect(() => {
+    queryClient.invalidateQueries(["users"]);
+  }, [messages]);
+
   const filteredSenders = senders.filter(
-    (sender) => sender.from.toLowerCase().includes(query.toLowerCase())
-      || sender.text.toLowerCase().includes(query.toLowerCase()),
+    (sender) =>
+      sender.from.toLowerCase().includes(query.toLowerCase()) ||
+      sender.text.toLowerCase().includes(query.toLowerCase()),
   );
+
+  if (status === "loading") {
+    return (
+      <Container>
+        <Loader size="md" />
+      </Container>
+    );
+  }
 
   return (
     <Container>

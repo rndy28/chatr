@@ -165,7 +165,11 @@ const SignIn = () => {
               />
             )}
           </Input>
-          {errors.password && <Error id="password-error" data-testid="password-error">{errors.password}</Error>}
+          {errors.password && (
+            <Error id="password-error" data-testid="password-error">
+              {errors.password}
+            </Error>
+          )}
         </Group>
         <Button
           size="lg"

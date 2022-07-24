@@ -128,7 +128,11 @@ const Main = ({ conversationWith, clearConversation }: Props) => {
             />
           )}
           {conversationWith.profile ? (
-            <Profile username={conversationWith.username} picture={ASSETS_PATH + conversationWith.profile} size="md" />
+            <Profile
+              username={conversationWith.username}
+              picture={ASSETS_PATH + conversationWith.profile}
+              size="md"
+            />
           ) : (
             <Profile username={conversationWith.username} size="md" />
           )}
@@ -156,7 +160,8 @@ const Main = ({ conversationWith, clearConversation }: Props) => {
         ref={messagesRef}
         conversationWith={conversationWith}
         messages={messages.filter(
-          (message) => message.to === conversationWith.username || message.from === conversationWith.username,
+          (message) =>
+            message.to === conversationWith.username || message.from === conversationWith.username,
         )}
       />
       <Form onSubmit={handleSubmit}>

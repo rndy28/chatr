@@ -128,7 +128,9 @@ const SignUp = () => {
             onChange={onChange}
           />
           {errors.username && (
-            <Error id="username-error" data-testid="username-error">{errors.username}</Error>
+            <Error id="username-error" data-testid="username-error">
+              {errors.username}
+            </Error>
           )}
         </Group>
         <Group>
@@ -164,9 +166,7 @@ const SignUp = () => {
               />
             )}
           </Input>
-          {errors.password && (
-            <Error id="password-error">{errors.password}</Error>
-          )}
+          {errors.password && <Error id="password-error">{errors.password}</Error>}
         </Group>
         <Button
           size="lg"

@@ -68,7 +68,11 @@ const Sidebar = ({ setConversation, conversationWith }: Props) => {
     useCallback(
       (e) => {
         const target = e.target as HTMLElement;
-        if (target.classList.contains("options") || target.parentElement?.classList.contains("options")) return;
+        if (
+          target.classList.contains("options") ||
+          target.parentElement?.classList.contains("options")
+        )
+          return;
         setOpenMenu(false);
       },
       [menuRef],
@@ -150,7 +154,13 @@ const Sidebar = ({ setConversation, conversationWith }: Props) => {
             `}
           >
             <IconMapper name="message" role="button" onClick={onToggleDrawer("contact")} />
-            <IconMapper name="options" role="button" className="options" data-testid="options-icon" onClick={onMenuOpen} />
+            <IconMapper
+              name="options"
+              role="button"
+              className="options"
+              data-testid="options-icon"
+              onClick={onMenuOpen}
+            />
             <AnimatePresence>
               {menu && (
                 <Menu
