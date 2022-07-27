@@ -42,7 +42,6 @@ const Conversations = ({ setConversation, query }: Props) => {
       setUsers((prev) =>
         JSON.stringify(prev) === JSON.stringify(response) ? prev : response.data,
       );
-      console.log(response.data);
     }
   }, [onlineUsers, messages, status, isRefetching]);
 

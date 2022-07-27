@@ -81,20 +81,13 @@ function reducer(state: StateT, action: ActionT) {
       return {
         ...state,
         newMessages: messages.map((message) => {
-          if (message.isRead) {
-            return {
-              ...message,
-            };
-          }
+          if (message.isRead) return message;
           if (message.from === conversationWith) {
-            return {
-              ...message,
-              isRead: true,
-            };
+            // eslint-disable-next-line no-param-reassign
+            message.isRead = !message.isRead;
+            return message;
           }
-          return {
-            ...message,
-          };
+          return message;
         }),
       };
     }
