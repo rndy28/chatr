@@ -1,0 +1,38 @@
+{
+  "name": "chatr",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"yarn server:dev\" \"yarn web:dev\"",
+    "server:build": "yarn workspace @chatr/server build",
+    "server:dev": "yarn workspace @chatr/server dev",
+    "server:start": "yarn workspace @chatr/server start",
+    "web:build": "yarn workspace @chatr/web build",
+    "web:dev": "yarn workspace @chatr/web dev",
+    "lint": "eslint --ext \".js,.ts,.tsx\" --ignore-path .gitignore . && manypkg check",
+    "lint:fix": "yarn lint --fix && manypkg fix",
+    "prettier:check": "prettier --check .",
+    "prettier:format": "prettier --write .",
+    "db:up": "docker compose up -d",
+    "db:nuke": "docker compose down --volumes --remove-orphans"
+  },
+  "workspaces": [
+    "apps/*"
+  ],
+  "repository": "https://github.com/rndy28/chatr",
+  "author": "rndy28 <rendyramadhan838@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@manypkg/cli": "^0.19.1",
+    "@typescript-eslint/eslint-plugin": "^5.36.1",
+    "concurrently": "^7.3.0",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard-with-typescript": "^22.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.0.1",
+    "prettier": "^2.7.1"
+  }
+}
