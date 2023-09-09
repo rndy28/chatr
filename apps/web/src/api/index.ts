@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
-import { localStorageGet } from "libs/helpers";
-import type { IUser } from "libs/types";
+import { localStorageGet } from "~/helpers";
+import type { IUser } from "~/types";
 
 const instance = axios.create({
   baseURL: `${import.meta.env.VITE_SERVER_ORIGIN}/api/`,
@@ -79,7 +79,7 @@ export const addContact = async (payload: { username: string }): Promise<AxiosRe
 
 export const updateUserProfile = async (payload: FormData): Promise<AxiosResponse<IUser>> => {
   try {
-    const response = await instance.patch("users/profile", payload);
+    const response = await instance.put("users/profile", payload);
     return response;
   } catch (error: any) {
     return error.response;
@@ -88,7 +88,7 @@ export const updateUserProfile = async (payload: FormData): Promise<AxiosRespons
 
 export const deleteUserProfilePicture = async (): Promise<AxiosResponse<IUser>> => {
   try {
-    const response = await instance.patch("users/profile/delete", {});
+    const response = await instance.put("users/profile/delete", {});
     return response;
   } catch (error: any) {
     return error.response;

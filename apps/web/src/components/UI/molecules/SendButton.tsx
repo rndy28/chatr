@@ -1,5 +1,5 @@
-import Button from "components/UI/atoms/Button";
 import { IconSend } from "@tabler/icons";
+import Button from "~/components/UI/atoms/Button";
 
 const SendButton = () => (
   <Button

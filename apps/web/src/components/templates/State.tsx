@@ -1,5 +1,5 @@
-import { Flex } from "components/UI/atoms/shared";
 import styled from "styled-components";
+import { Flex } from "~/components/UI/atoms/shared";
 
 const Container = styled.div`
   max-height: inherit;

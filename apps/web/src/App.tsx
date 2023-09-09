@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/promise-function-async */
-import Loader from "components/UI/atoms/Loader";
-import GlobalStyles from "GlobalStyles";
-import { SocketProvider } from "libs/contexts/SocketContext";
-import { UserProvider } from "libs/contexts/UserContext";
-import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Protected, Public } from "routes";
+import Loader from "~/components/UI/atoms/Loader";
+import GlobalStyles from "~/GlobalStyles";
+import { SocketProvider } from "~/contexts/SocketContext";
+import { UserProvider } from "~/contexts/UserContext";
+import { Protected, Public } from "~/routes";
 
-const Home = lazy(() => import("pages/home"));
-const SignIn = lazy(() => import("pages/auth/signin"));
-const SignUp = lazy(() => import("pages/auth/signup"));
+const Home = lazy(() => import("~/pages/home"));
+const SignIn = lazy(() => import("~/pages/auth/signin"));
+const SignUp = lazy(() => import("~/pages/auth/signup"));
 
 const queryClient = new QueryClient({
   defaultOptions: {

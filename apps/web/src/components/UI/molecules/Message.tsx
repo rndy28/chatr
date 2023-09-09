@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { motion, HTMLMotionProps } from "framer-motion";
+import { HTMLMotionProps, motion } from "framer-motion";
 import ReactTimeAgo from "react-time-ago";
+import styled from "styled-components";
 
 type MessageType = "in" | "out";
 

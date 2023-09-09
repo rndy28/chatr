@@ -1,6 +1,6 @@
-import type { Size } from "libs/types";
 import React, { forwardRef } from "react";
 import styled, { css } from "styled-components";
+import type { Size } from "~/types";
 
 const sm = css`
   width: 2.5rem;
@@ -47,7 +47,7 @@ interface ContainerProps extends React.ComponentPropsWithoutRef<"div"> {
   size?: Size;
 }
 
-const Profile = forwardRef<HTMLDivElement, Props | ContainerProps>((props, ref) =>
+const Avatar = forwardRef<HTMLDivElement, Props | ContainerProps>((props, ref) =>
   "picture" in props ? (
     <Container {...props} ref={ref} data-testid="profile-picture">
       <img src={props.picture} alt={`${props.username} Profile`} />
@@ -67,4 +67,4 @@ const Profile = forwardRef<HTMLDivElement, Props | ContainerProps>((props, ref) 
   )
 );
 
-export default Profile;
+export default Avatar;

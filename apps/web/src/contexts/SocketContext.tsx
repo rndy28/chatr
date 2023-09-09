@@ -1,7 +1,7 @@
-import { createCtx, localStorageGet } from "libs/helpers";
-import { MessageT } from "libs/types";
 import React, { useEffect, useMemo, useReducer, useState } from "react";
 import { io } from "socket.io-client";
+import { createCtx, localStorageGet } from "~/helpers";
+import { MessageT } from "~/types";
 
 const socket = io(import.meta.env.VITE_SERVER_ORIGIN, {
   autoConnect: false,

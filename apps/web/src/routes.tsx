@@ -1,5 +1,5 @@
-import { useUser } from "libs/contexts/UserContext";
-import { Outlet, Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
+import { useUser } from "~/contexts/UserContext";
 
 const Protected = () => {
   const { user } = useUser();

@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { motion, HTMLMotionProps } from "framer-motion";
+import { HTMLMotionProps, motion } from "framer-motion";
 import React, { useMemo } from "react";
+import styled from "styled-components";
 
 const Container = styled(motion.div)`
   width: fit-content;

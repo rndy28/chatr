@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from "react";
-import { createCtx, localStorageGet } from "libs/helpers";
-import type { IUser } from "libs/types";
+import React, { useMemo, useState } from "react";
+import { createCtx, localStorageGet } from "~/helpers";
+import type { IUser } from "~/types";
 
 interface UserContextT {
   user: IUser | undefined;

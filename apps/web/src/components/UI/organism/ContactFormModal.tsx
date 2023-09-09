@@ -1,16 +1,11 @@
-import { addContact } from "api";
-import Modal from "components/templates/Modal";
-import Button from "components/UI/atoms/Button";
-import Error from "components/UI/atoms/Error";
-import IconMapper from "components/UI/atoms/IconMapper";
-import Input from "components/UI/atoms/Input";
-import Label from "components/UI/atoms/Label";
-import { Flex } from "components/UI/atoms/shared";
-import { motion } from "framer-motion";
-import { formInModalVariant } from "libs/animation";
-import React, { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { addContact } from "~/api";
+import Modal from "~/components/templates/Modal";
+import { Button, Error, Flex, IconMapper, Input, Label } from "~/components/UI/atoms";
+import { formInModalVariant } from "~/animation";
 
 const Container = styled(motion.form)`
   padding: 1rem;
@@ -110,7 +105,7 @@ const ContactFormModal = ({ onModalClose }: Props) => {
             name="username"
             aria-invalid={!!error}
             aria-errormessage="username-error"
-            elementSize="md"
+            size="md"
             variant="secondary"
             onChange={onChange}
             autoFocus

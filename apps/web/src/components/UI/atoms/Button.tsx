@@ -1,14 +1,14 @@
-import type { Size, Variant } from "libs/types";
 import React, { forwardRef } from "react";
 import styled, { css, keyframes } from "styled-components";
+import type { Size, Variant } from "~/types";
 
-type StyledButtonProps = {
+interface StyledButtonProps {
   variant: Variant;
   size: Size;
   loading?: boolean;
   withIcon?: boolean;
   disabled?: boolean;
-};
+}
 
 const spin1 = keyframes`
      0%    {clip-path: polygon(50% 50%,0       0,  50%   0%,  50%    0%, 50%    0%, 50%    0%, 50%    0% )}

@@ -1,9 +1,9 @@
-import "normalize.css";
-import App from "App";
-import React from "react";
-import type {} from "styled-components/cssprop";
-import { createRoot } from "react-dom/client";
 import TimeAgo from "javascript-time-ago";
+import "normalize.css";
+import React from "react";
+import { createRoot } from "react-dom/client";
+import type {} from "styled-components/cssprop";
+import App from "~/App";
 
 import en from "javascript-time-ago/locale/en.json";
 

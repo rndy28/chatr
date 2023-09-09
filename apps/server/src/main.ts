@@ -29,7 +29,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get("/api", (_req, res) => res.sendStatus(200));
+app.get("/api/healthcheck", (_req, res) => res.sendStatus(200));
 
 app.use("/api/assets", express.static(path.join(__dirname, "./assets")));
 app.use("/api/auth", authRoutes);

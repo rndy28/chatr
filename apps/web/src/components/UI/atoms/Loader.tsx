@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
-import styled, { keyframes } from "styled-components";
-import type { Size } from "libs/types";
 import React from "react";
+import styled, { keyframes } from "styled-components";
+import type { Size } from "~/types";
 
 const rotate = keyframes`
    100% {transform: rotate(1turn)}

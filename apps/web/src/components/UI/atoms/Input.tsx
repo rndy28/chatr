@@ -1,6 +1,6 @@
 import React, { forwardRef } from "react";
 import styled, { css, CSSProp } from "styled-components";
-import type { Position, Size, Variant } from "libs/types";
+import type { Position, Size, Variant } from "~/types";
 
 const sm = css`
   height: 2.3rem;
@@ -33,17 +33,13 @@ const neutral = css`
   padding-inline: 0;
 `;
 
-const baseInput = css<{ elementSize: Size; variant: Variant }>`
-  width: 100%;
+const baseInput = css<{ variant?: Variant }>`
   padding-inline: 0.8rem;
   border-radius: 0.4rem;
   font-size: 0.9rem;
   outline: none;
   transition: all 150ms ease-in;
   border: 1px solid transparent;
-  ${(p) => p.elementSize === "sm" && sm}
-  ${(p) => p.elementSize === "md" && md}
-  ${(p) => p.elementSize === "lg" && lg}
   ${(p) => p.variant === "primary" && primary}
   ${(p) => p.variant === "secondary" && secondary}
   ${(p) => p.variant === "neutral" && neutral}
@@ -52,7 +48,7 @@ const baseInput = css<{ elementSize: Size; variant: Variant }>`
   }
 `;
 
-const StyledInput = styled.input<{ elementSize: Size; variant: Variant }>`
+const StyledInput = styled.input<{ variant?: Variant }>`
   ${baseInput}
   ${(p) =>
     p["aria-invalid"] &&
@@ -61,15 +57,17 @@ const StyledInput = styled.input<{ elementSize: Size; variant: Variant }>`
     `}
 `;
 
-const Wrapper = styled.div<{
+type ContainerProps = {
   position: Position;
   invalid: boolean;
-  elementSize: Size;
   variant: Variant;
-}>`
+};
+
+const Container = styled.div<ContainerProps>`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   gap: 0.5rem;
   ${baseInput}
   ${StyledInput} {
@@ -77,45 +75,60 @@ const Wrapper = styled.div<{
     border: none;
     border-radius: 0;
     padding-inline: 0;
+    height: 100%;
+    ${(p) => p.variant !== "neutral" && "width: 90%;"}
   }
-  ${(p) =>
-    p.invalid &&
-    css`
-      border-color: #bf616a !important;
-    `}
+
   ${(p) =>
     p.position === "right" &&
     css`
       flex-direction: row-reverse;
     `}
+  ${(p) =>
+    p.invalid &&
+    css`
+      border-color: #bf616a !important;
+    `}
 `;
 
-interface Props extends React.ComponentPropsWithoutRef<"input"> {
-  elementSize: Size;
+interface Props extends Omit<React.ComponentPropsWithoutRef<"input">, "size"> {
+  size: Size;
   variant: Variant;
-  withIcon?: {
+  icon?: {
     position: Position;
+    element: React.ReactNode;
   };
+  htmlSize?: number;
   cssProps?: CSSProp<any>;
 }
 
+const sizeMapped = {
+  sm,
+  md,
+  lg,
+};
+
 const Input = forwardRef<HTMLInputElement, Props>(
-  ({ children, withIcon, elementSize, variant, cssProps, ...props }, ref) => {
-    if (withIcon) {
+  ({ children, icon, size, variant, cssProps, htmlSize, ...props }, ref) => {
+    const actualSize = sizeMapped[size];
+
+    if (icon) {
       return (
-        <Wrapper
-          position={withIcon.position}
+        <Container
+          position={icon.position}
           invalid={props["aria-invalid"] as boolean}
-          elementSize={elementSize}
           variant={variant}
-          css={cssProps}
+          css={`
+            ${actualSize}
+            ${cssProps}
+          `}
         >
-          {children}
-          <StyledInput ref={ref} elementSize={elementSize} variant={variant} {...props} />
-        </Wrapper>
+          {icon.element}
+          <StyledInput variant={variant} size={htmlSize} ref={ref} {...props} />
+        </Container>
       );
     }
-    return <StyledInput ref={ref} elementSize={elementSize} variant={variant} {...props} />;
+    return <StyledInput variant={variant} size={htmlSize} ref={ref} css={actualSize} {...props} />;
   }
 );
 

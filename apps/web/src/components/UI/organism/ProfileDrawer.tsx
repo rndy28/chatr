@@ -1,21 +1,16 @@
 import { IconCheck, IconPencil } from "@tabler/icons";
-import { deleteUserProfilePicture, updateUserProfile } from "api";
-import Drawer from "components/templates/Drawer";
-import Error from "components/UI/atoms/Error";
-import Input from "components/UI/atoms/Input";
-import Label from "components/UI/atoms/Label";
-import Profile from "components/UI/atoms/Profile";
-import { Flex } from "components/UI/atoms/shared";
-import Menu from "components/UI/molecules/Menu";
 import { AnimatePresence, motion } from "framer-motion";
-import { inputIconVariant } from "libs/animation";
-import { ASSETS_PATH } from "libs/constants";
-import { useUser } from "libs/contexts/UserContext";
-import { localStorageSet } from "libs/helpers";
-import useContextMenu from "libs/hooks/useContextMenu";
-import { IUser } from "libs/types";
 import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
+import { deleteUserProfilePicture, updateUserProfile } from "~/api";
+import Drawer from "~/components/templates/Drawer";
+import { Avatar, Error, Flex, Input, Label, Menu } from "~/components/UI";
+import { inputIconVariant } from "~/animation";
+import { ASSETS_PATH } from "~/constants";
+import { useUser } from "~/contexts/UserContext";
+import { localStorageSet } from "~/helpers";
+import useContextMenu from "~/hooks/useContextMenu";
+import { IUser } from "~/types";
 
 const Form = styled.form`
   display: flex;
@@ -194,7 +189,7 @@ const ProfileDrawer = ({ onClose }: Props) => {
       <Form ref={formRef}>
         <Flex direction="column" alignItems="center">
           {thumbnailProfile ? (
-            <Profile
+            <Avatar
               username={updatedUser.username}
               picture={thumbnailProfile}
               ref={profileRef}
@@ -205,7 +200,7 @@ const ProfileDrawer = ({ onClose }: Props) => {
               `}
             />
           ) : (
-            <Profile
+            <Avatar
               username={updatedUser.username}
               ref={profileRef}
               className="profile"
@@ -280,10 +275,39 @@ const ProfileDrawer = ({ onClose }: Props) => {
             id="username"
             name="username"
             autoComplete="off"
-            elementSize="md"
+            size="md"
             variant="neutral"
-            withIcon={{
+            icon={{
               position: "right",
+              element: (
+                <AnimatePresence>
+                  {inputFieldFocus.username ? (
+                    <IconContainer
+                      variants={inputIconVariant}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                      role="button"
+                      onClick={onSave("username")}
+                      key="save"
+                    >
+                      <IconCheck />
+                    </IconContainer>
+                  ) : (
+                    <IconContainer
+                      variants={inputIconVariant}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                      role="button"
+                      onClick={onFocus("username")}
+                      key="edit"
+                    >
+                      <IconPencil />
+                    </IconContainer>
+                  )}
+                </AnimatePresence>
+              ),
             }}
             placeholder="type your username"
             value={updatedUser.username}
@@ -295,35 +319,7 @@ const ProfileDrawer = ({ onClose }: Props) => {
             css={`
               color: #4c566a;
             `}
-          >
-            <AnimatePresence>
-              {inputFieldFocus.username ? (
-                <IconContainer
-                  variants={inputIconVariant}
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
-                  role="button"
-                  onClick={onSave("username")}
-                  key="save"
-                >
-                  <IconCheck />
-                </IconContainer>
-              ) : (
-                <IconContainer
-                  variants={inputIconVariant}
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
-                  role="button"
-                  onClick={onFocus("username")}
-                  key="edit"
-                >
-                  <IconPencil />
-                </IconContainer>
-              )}
-            </AnimatePresence>
-          </Input>
+          />
           {errors.username && <Error id="username-error">{errors.username}</Error>}
         </Group>
         <Group
@@ -346,10 +342,39 @@ const ProfileDrawer = ({ onClose }: Props) => {
             id="status"
             name="status"
             autoComplete="off"
-            elementSize="md"
+            size="md"
             variant="neutral"
-            withIcon={{
+            icon={{
               position: "right",
+              element: (
+                <AnimatePresence>
+                  {inputFieldFocus.status ? (
+                    <IconContainer
+                      variants={inputIconVariant}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                      role="button"
+                      onClick={onSave("status")}
+                      key="save"
+                    >
+                      <IconCheck />
+                    </IconContainer>
+                  ) : (
+                    <IconContainer
+                      variants={inputIconVariant}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                      role="button"
+                      onClick={onFocus("status")}
+                      key="edit"
+                    >
+                      <IconPencil />
+                    </IconContainer>
+                  )}
+                </AnimatePresence>
+              ),
             }}
             placeholder="type your status"
             value={updatedUser.status}
@@ -361,35 +386,7 @@ const ProfileDrawer = ({ onClose }: Props) => {
             css={`
               color: #4c566a;
             `}
-          >
-            <AnimatePresence>
-              {inputFieldFocus.status ? (
-                <IconContainer
-                  variants={inputIconVariant}
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
-                  role="button"
-                  onClick={onSave("status")}
-                  key="save"
-                >
-                  <IconCheck />
-                </IconContainer>
-              ) : (
-                <IconContainer
-                  variants={inputIconVariant}
-                  initial="hidden"
-                  animate="visible"
-                  exit="hidden"
-                  role="button"
-                  onClick={onFocus("status")}
-                  key="edit"
-                >
-                  <IconPencil />
-                </IconContainer>
-              )}
-            </AnimatePresence>
-          </Input>
+          />
           {errors.status && <Error id="status-error">{errors.status}</Error>}
         </Group>
       </Form>

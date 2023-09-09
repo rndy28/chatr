@@ -1,27 +1,33 @@
 import { IconSearch } from "@tabler/icons";
-import Input from "components/UI/atoms/Input";
-import { CSSProp } from "styled-components";
 import React from "react";
+import Input from "~/components/UI/atoms/Input";
 
-interface Props extends React.ComponentPropsWithoutRef<"input"> {
-  cssProps?: CSSProp<any>;
-}
+interface Props extends Omit<React.ComponentPropsWithoutRef<"input">, "size"> {}
 
 const SearchBar = (props: Props) => (
   <Input
-    elementSize="lg"
+    size="lg"
     variant="secondary"
-    withIcon={{
+    icon={{
       position: "left",
+      element: (
+        <IconSearch
+          css={`
+            color: #9aa0ac;
+          `}
+        />
+      ),
     }}
+    cssProps={`
+      width: 90%;
+      max-width: 27rem;
+      margin: 1rem auto;
+      @media (min-width: 900px) {
+        max-width: 21rem;
+      }
+    `}
     {...props}
-  >
-    <IconSearch
-      css={`
-        color: #9aa0ac;
-      `}
-    />
-  </Input>
+  />
 );
 
 export default SearchBar;

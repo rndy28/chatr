@@ -1,23 +1,18 @@
-import Header from "components/templates/Header";
-import IconMapper from "components/UI/atoms/IconMapper";
-import Profile from "components/UI/atoms/Profile";
-import { Flex } from "components/UI/atoms/shared";
-import Menu from "components/UI/molecules/Menu";
-import SearchBar from "components/UI/molecules/SearchBar";
-import ContactDrawer from "components/UI/organism/ContactDrawer";
-import ContactFormModal from "components/UI/organism/ContactFormModal";
-import Conversations from "components/UI/organism/Conversations";
-import ProfileDrawer from "components/UI/organism/ProfileDrawer";
 import { AnimatePresence } from "framer-motion";
-import { ASSETS_PATH } from "libs/constants";
-import { useSocket } from "libs/contexts/SocketContext";
-import { useUser } from "libs/contexts/UserContext";
-import useDebouncedQuery from "libs/hooks/useDebouncedQuery";
-import useOutsideClick from "libs/hooks/useOutsideClick";
-import { IUser } from "libs/types";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import Header from "~/components/templates/Header";
+import { Avatar, Conversations, Flex, IconMapper, Menu, SearchBar } from "~/components/UI";
+import { ASSETS_PATH } from "~/constants";
+import { useSocket } from "~/contexts/SocketContext";
+import { useUser } from "~/contexts/UserContext";
+import useDebouncedQuery from "~/hooks/useDebouncedQuery";
+import useOutsideClick from "~/hooks/useOutsideClick";
+import { IUser } from "~/types";
+import ContactDrawer from "./ContactDrawer";
+import ContactFormModal from "./ContactFormModal";
+import ProfileDrawer from "./ProfileDrawer";
 
 const Container = styled.div`
   width: 100%;
@@ -47,10 +42,10 @@ const Wrapper = styled.aside`
 
 type Drawer = "profile" | "contact";
 
-type Props = {
+interface Props {
   setConversation: (user: IUser) => void;
   conversationWith?: IUser;
-};
+}
 
 const Sidebar = ({ setConversation, conversationWith }: Props) => {
   const [drawer, setDrawer] = useState<Drawer | undefined>();
@@ -132,14 +127,14 @@ const Sidebar = ({ setConversation, conversationWith }: Props) => {
       <Container>
         <Header>
           {user!.profile ? (
-            <Profile
+            <Avatar
               username={user!.username}
               picture={ASSETS_PATH + user!.profile}
               size="md"
               onClick={onToggleDrawer("profile")}
             />
           ) : (
-            <Profile username={user!.username} size="md" onClick={onToggleDrawer("profile")} />
+            <Avatar username={user!.username} size="md" onClick={onToggleDrawer("profile")} />
           )}
 
           <Flex
@@ -173,16 +168,7 @@ const Sidebar = ({ setConversation, conversationWith }: Props) => {
             </AnimatePresence>
           </Flex>
         </Header>
-        <SearchBar
-          placeholder="Search here..."
-          cssProps="width: 90%;
-              max-width: 27rem;
-              margin: 1rem auto;
-              @media (min-width: 900px) {
-                max-width: 21rem;
-              }"
-          onChange={onDebouncedQuery}
-        />
+        <SearchBar placeholder="Search here..." onChange={onDebouncedQuery} />
         <Conversations setConversation={setConversation} query={query} />
         <AnimatePresence>
           {drawer === "profile" && <ProfileDrawer onClose={onToggleDrawer("profile")} />}

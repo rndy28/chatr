@@ -1,8 +1,8 @@
-import { motion, HTMLMotionProps } from "framer-motion";
-import { modalVariant } from "libs/animation";
+import { HTMLMotionProps, motion } from "framer-motion";
+import React from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
-import React from "react";
+import { modalVariant } from "~/animation";
 
 const Container = styled(motion.div)`
   position: fixed;

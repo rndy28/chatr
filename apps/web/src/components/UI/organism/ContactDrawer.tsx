@@ -1,13 +1,11 @@
-import { getContacts } from "api";
-import Drawer from "components/templates/Drawer";
-import Loader from "components/UI/atoms/Loader";
-import Contact from "components/UI/molecules/Contact";
-import SearchBar from "components/UI/molecules/SearchBar";
-import useDebouncedQuery from "libs/hooks/useDebouncedQuery";
-import type { IUser } from "libs/types";
-import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { getContacts } from "~/api";
+import Drawer from "~/components/templates/Drawer";
+import { Contact, Loader, SearchBar } from "~/components/UI";
+import useDebouncedQuery from "~/hooks/useDebouncedQuery";
+import type { IUser } from "~/types";
 
 const Container = styled.div`
   background-color: inherit;
@@ -54,16 +52,7 @@ const ContactDrawer = ({ onClose, setConversation }: Props) => {
 
   return (
     <Drawer title="Contact" onHide={onClose}>
-      <SearchBar
-        placeholder="search contact..."
-        cssProps="width: 90%;
-              max-width: 27rem;
-              margin: 1rem auto;
-              @media (min-width: 900px) {
-                max-width: 21rem;
-              }"
-        onChange={onDebouncedQuery}
-      />
+      <SearchBar placeholder="search contact..." onChange={onDebouncedQuery} />
       <Container>
         {filteredContacts.map((contact) => (
           <Contact

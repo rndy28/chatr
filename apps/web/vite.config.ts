@@ -18,6 +18,6 @@ export default defineConfig({
         ],
       },
     }),
-    tsconfigPaths(),
+    tsconfigPaths({ projects: ["./tsconfig.json"] }),
   ],
 });

@@ -1,9 +1,8 @@
-import Profile from "components/UI/atoms/Profile";
-import { ellipsis, Flex } from "components/UI/atoms/shared";
-import { ASSETS_PATH } from "libs/constants";
-import { IUser } from "libs/types";
-import styled from "styled-components";
 import React from "react";
+import styled from "styled-components";
+import { Avatar, ellipsis, Flex } from "~/components/UI/atoms";
+import { ASSETS_PATH } from "~/constants";
+import { IUser } from "~/types";
 
 const Container = styled.li`
   display: flex;
@@ -40,9 +39,9 @@ interface Props extends React.ComponentPropsWithoutRef<"li">, IUser {}
 const Contact = ({ status, profile, username, ...props }: Props) => (
   <Container {...props}>
     {profile ? (
-      <Profile username={username} picture={ASSETS_PATH + profile} size="lg" />
+      <Avatar username={username} picture={ASSETS_PATH + profile} size="lg" />
     ) : (
-      <Profile username={username} size="lg" />
+      <Avatar username={username} size="lg" />
     )}
     <Flex
       direction="column"

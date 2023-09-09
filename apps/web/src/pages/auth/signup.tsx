@@ -1,18 +1,15 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import { IconEye, IconEyeOff } from "@tabler/icons";
-import { signup } from "api";
-import Button from "components/UI/atoms/Button";
-import Error from "components/UI/atoms/Error";
-import Input from "components/UI/atoms/Input";
-import Label from "components/UI/atoms/Label";
-import { useSocket } from "libs/contexts/SocketContext";
-import { useUser } from "libs/contexts/UserContext";
-import { localStorageSet } from "libs/helpers";
-import useChangePasswordType from "libs/hooks/useChangePasswordType";
+import { useMutation } from "@tanstack/react-query";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { signup } from "~/api";
+import { Button, Error, Input, Label } from "~/components/UI";
+import { useSocket } from "~/contexts/SocketContext";
+import { useUser } from "~/contexts/UserContext";
+import { localStorageSet } from "~/helpers";
+import useChangePasswordType from "~/hooks/useChangePasswordType";
 import { Container, Form, Group, SmallText } from "./style";
-import { useMutation } from "@tanstack/react-query";
 
 const SignUp = () => {
   const [passwordType, togglePasswordType] = useChangePasswordType();
@@ -123,7 +120,7 @@ const SignUp = () => {
           <Input
             id="username"
             name="username"
-            elementSize="lg"
+            size="lg"
             variant="primary"
             aria-invalid={!!errors.username}
             aria-errormessage="username-error"
@@ -140,34 +137,34 @@ const SignUp = () => {
           <Input
             id="password"
             name="password"
-            elementSize="lg"
+            size="lg"
             variant="primary"
             type={passwordType}
             aria-invalid={!!errors.password}
             aria-errormessage="password-error"
-            withIcon={{
+            icon={{
               position: "right",
+              element:
+                passwordType === "password" ? (
+                  <IconEye
+                    color="#4C566A"
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    onClick={togglePasswordType}
+                  />
+                ) : (
+                  <IconEyeOff
+                    color="#4C566A"
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    onClick={togglePasswordType}
+                  />
+                ),
             }}
             onChange={onChange}
-          >
-            {passwordType === "password" ? (
-              <IconEye
-                color="#4C566A"
-                style={{
-                  cursor: "pointer",
-                }}
-                onClick={togglePasswordType}
-              />
-            ) : (
-              <IconEyeOff
-                color="#4C566A"
-                style={{
-                  cursor: "pointer",
-                }}
-                onClick={togglePasswordType}
-              />
-            )}
-          </Input>
+          />
           {errors.password && <Error id="password-error">{errors.password}</Error>}
         </Group>
         <Button

@@ -1,8 +1,8 @@
-import IconMapper from "components/UI/atoms/IconMapper";
 import { motion } from "framer-motion";
-import { drawerVariant } from "libs/animation";
-import styled from "styled-components";
 import React from "react";
+import styled from "styled-components";
+import { drawerVariant } from "~/animation";
+import IconMapper from "~/components/UI/atoms/IconMapper";
 
 const Container = styled(motion.div)`
   position: absolute;
