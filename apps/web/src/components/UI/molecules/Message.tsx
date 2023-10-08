@@ -1,10 +1,9 @@
-import { HTMLMotionProps, motion } from "framer-motion";
 import ReactTimeAgo from "react-time-ago";
 import styled from "styled-components";
 
 type MessageType = "in" | "out";
 
-const Container = styled(motion.div)<{ type: MessageType }>`
+const Container = styled.div<{ type: MessageType }>`
   margin-left: ${({ type }) => (type === "in" ? "0" : "auto")};
   position: relative;
   width: fit-content;
@@ -16,8 +15,8 @@ const Container = styled(motion.div)<{ type: MessageType }>`
 
 const Text = styled.div<{ type: MessageType }>`
   font-size: 0.913rem;
-  background-color: ${({ type }) => (type === "in" ? "#fff" : "#5E81AC")};
-  color: ${({ type }) => (type === "in" ? "#434C5E" : "#fff")};
+  background-color: ${({ type }) => (type === "in" ? "#4C566A" : "#fff")};
+  color: ${({ type }) => (type === "in" ? "#fff" : "#2E3440")};
   border-radius: 0.4rem;
   min-height: 0.8rem;
   width: fit-content;
@@ -27,6 +26,7 @@ const Text = styled.div<{ type: MessageType }>`
   align-items: center;
   padding: 0.7rem;
   word-break: break-all;
+  position: relative;
 `;
 
 const Meta = styled.span<{ type: MessageType }>`
@@ -39,17 +39,47 @@ const Meta = styled.span<{ type: MessageType }>`
   color: #434c5e;
 `;
 
-interface Props extends HTMLMotionProps<"div"> {
+const Check = styled.span<{ isRead: boolean }>`
+  position: absolute;
+  bottom: 0px;
+  right: 8px;
+  color: ${({ isRead }) => (isRead ? "#5e9fee" : "#777777")};
+`;
+
+interface Props {
   type: MessageType;
   text: string;
   sent: number;
+  isRead: boolean;
 }
 
-const Message = ({ text, type, sent, ...props }: Props) => {
+const Message = ({ text, type, sent, isRead }: Props) => {
   const date = new Date(sent * 1000);
   return (
-    <Container type={type} {...props}>
-      <Text type={type}>{text}</Text>
+    <Container type={type}>
+      <Text type={type}>
+        {text}
+        {/* Implement message is read indicator */}
+        {/* {type === "out" && (
+          <Check isRead={isRead}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width={20}
+              height={20}
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M7 12l5 5l10 -10"></path>
+              <path d="M2 12l5 5m5 -5l5 -5"></path>
+            </svg>
+          </Check>
+        )} */}
+      </Text>
       <Meta type={type}>
         <ReactTimeAgo date={date} />
       </Meta>

@@ -30,10 +30,10 @@ const Description = styled.p`
   }
 `;
 
-type Props = {
+interface Props {
   title: string;
   description?: string;
-};
+}
 
 const State = ({ title, description }: Props) => (
   <Container>

@@ -1,42 +1,68 @@
+import fastifyCors from "@fastify/cors";
 import "dotenv/config";
-import cors from "cors";
-import express from "express";
-import { createServer } from "http";
-import { Server } from "socket.io";
+import fastify from "fastify";
+import fastifyIO from "fastify-socket.io";
 import connectDB from "./connectDB";
+import { CORS_ORIGIN, HOST, PORT } from "./constants";
+import auth from "./routes/auth.route";
+import contacts from "./routes/contacts.route";
+import users from "./routes/users.route";
 import socket from "./socket";
-import path from "path";
-import authRoutes from "./routes/auth.routes";
-import usersRoutes from "./routes/users.routes";
-import requireUser from "./middleware/requireUser";
-import { PORT } from "./constants";
+import type { FastifyReplyWithLocals } from "./types";
+import { compose } from "./utils/compose";
 
-const app = express();
-const httpServer = createServer(app);
+async function buildServer() {
+  const app = fastify({
+    logger: true,
+  });
 
-const io = new Server(httpServer, {
-  cors: {
-    origin: process.env.CORS_ORIGIN,
-  },
-});
+  await app.register(fastifyCors, {
+    origin: CORS_ORIGIN,
+  });
 
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN,
-  })
-);
+  await app.register(fastifyIO, {
+    cors: {
+      origin: CORS_ORIGIN,
+    },
+  });
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+  await app.register(
+    (instance, _, done) => {
+      instance.addHook("onRequest", (_, reply: FastifyReplyWithLocals, done) => {
+        reply.locals = {};
 
-app.get("/api/healthcheck", (_req, res) => res.sendStatus(200));
+        done();
+      });
 
-app.use("/api/assets", express.static(path.join(__dirname, "./assets")));
-app.use("/api/auth", authRoutes);
-app.use("/api/users", requireUser, usersRoutes);
+      instance.get("/healthcheck", () => ({ status: "ok", port: PORT }));
 
-httpServer.listen(+PORT, +"0.0.0.0", async () => {
-  console.log(`[server]: server is running on port http://localhost:${PORT}`);
-  await connectDB();
-  socket({ io });
-});
+      compose(auth, users, contacts)(instance);
+
+      done();
+    },
+    { prefix: "/api/v1" }
+  );
+
+  return app;
+}
+
+async function main() {
+  const app = await buildServer();
+
+  try {
+    await connectDB();
+    await socket(app);
+
+    await app.listen({
+      port: PORT,
+      host: HOST,
+    });
+
+    console.log(`Server started at http://${HOST}:${PORT}`);
+  } catch (e) {
+    console.error(e);
+    process.exit(1);
+  }
+}
+
+main();

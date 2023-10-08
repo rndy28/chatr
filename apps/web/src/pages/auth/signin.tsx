@@ -1,12 +1,12 @@
+/* eslint-disable no-useless-return */
 /* eslint-disable react/jsx-one-expression-per-line */
 import { IconEye, IconEyeOff } from "@tabler/icons";
 import { useMutation } from "@tanstack/react-query";
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { signin } from "~/api";
 import { Button, Error, Input, Label } from "~/components/UI";
-import { useSocket } from "~/contexts/SocketContext";
-import { useUser } from "~/contexts/UserContext";
+import { useRoot } from "~/contexts/RootContext";
 import { localStorageSet } from "~/helpers";
 import useChangePasswordType from "~/hooks/useChangePasswordType";
 import { Container, Form, Group, SmallText } from "./style";
@@ -23,15 +23,16 @@ const SignIn = () => {
   });
   const { mutateAsync, isLoading } = useMutation(signin);
 
-  const navigate = useNavigate();
-  const { setUser } = useUser();
-  const { socket } = useSocket();
+  const { setUser, socket } = useRoot();
+
   const isSubmitted = useRef(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     isSubmitted.current = true;
-    if (errors.username || errors.password) return;
+
+    validate();
 
     try {
       const { data } = await mutateAsync(authUser);
@@ -42,21 +43,20 @@ const SignIn = () => {
       };
       localStorageSet("token", data.token);
       localStorageSet("user", user);
-      setUser(user);
+
       socket.auth = {
         token: data.token,
       };
       socket.connect();
-      navigate("/");
+      setUser(user);
     } catch (error: any) {
-      if (error && "data" in error) {
-        const field = error.data["field" as keyof typeof error.data] as string;
-        const message = error.data["message" as keyof typeof error.data] as string;
-        setErrors((prev) => ({
-          ...prev,
-          [field]: message,
-        }));
-      }
+      const field = error.data?.field;
+      const message = error.data?.message;
+
+      setErrors((prev) => ({
+        ...prev,
+        [field]: message,
+      }));
     } finally {
       isSubmitted.current = false;
     }
@@ -69,33 +69,42 @@ const SignIn = () => {
     }));
   };
 
-  const handleError = () => {
+  const validate = () => {
     if (authUser.username.length === 0) {
       setErrors((prev) => ({
         ...prev,
         username: "username is required",
       }));
+
+      return;
     } else if (authUser.username.length > 0 && authUser.username.length < 3) {
       setErrors((prev) => ({
         ...prev,
         username: "username should have at least 3+ characters",
       }));
+
+      return;
     } else {
       setErrors((prev) => ({
         ...prev,
         username: "",
       }));
     }
+
     if (authUser.password === "") {
       setErrors((prev) => ({
         ...prev,
         password: "password is required",
       }));
+
+      return;
     } else if (authUser.password.length < 3) {
       setErrors((prev) => ({
         ...prev,
         password: "password should have at least 3+ characters",
       }));
+
+      return;
     } else {
       setErrors((prev) => ({
         ...prev,
@@ -106,9 +115,9 @@ const SignIn = () => {
 
   useEffect(() => {
     if (isSubmitted.current) {
-      handleError();
+      validate();
     }
-  }, [authUser, isSubmitted.current]);
+  }, [authUser]);
 
   return (
     <Container>

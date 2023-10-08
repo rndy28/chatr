@@ -8,7 +8,7 @@ export interface IUserInput {
 }
 
 export interface IUser extends IUserInput, mongoose.Document {
-  contacts: Array<Pick<IUserInput, "username">>;
+  contacts: Array<Omit<IUserInput, "password">>;
   createdAt: Date;
   updatedAt: Date;
 }

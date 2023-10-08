@@ -35,11 +35,11 @@ const Title = styled.h3`
   margin-bottom: 7px;
 `;
 
-type Props = {
+interface Props {
   children: React.ReactNode;
   title: string;
   onHide: () => void;
-};
+}
 
 const Drawer = ({ children, title, onHide }: Props) => (
   <Container variants={drawerVariant} initial="hidden" animate="visible" exit="exit">

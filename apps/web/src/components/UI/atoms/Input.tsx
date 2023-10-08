@@ -57,11 +57,11 @@ const StyledInput = styled.input<{ variant?: Variant }>`
     `}
 `;
 
-type ContainerProps = {
+interface ContainerProps {
   position: Position;
   invalid: boolean;
   variant: Variant;
-};
+}
 
 const Container = styled.div<ContainerProps>`
   display: flex;
@@ -76,6 +76,7 @@ const Container = styled.div<ContainerProps>`
     border-radius: 0;
     padding-inline: 0;
     height: 100%;
+    width: 100%;
     ${(p) => p.variant !== "neutral" && "width: 90%;"}
   }
 

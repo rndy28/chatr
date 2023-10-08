@@ -2,12 +2,12 @@ import { IconCheck, IconPencil } from "@tabler/icons";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
-import { deleteUserProfilePicture, updateUserProfile } from "~/api";
+import { inputIconVariant } from "~/animation";
+import { deleteAvatar, updateUser } from "~/api";
 import Drawer from "~/components/templates/Drawer";
 import { Avatar, Error, Flex, Input, Label, Menu } from "~/components/UI";
-import { inputIconVariant } from "~/animation";
 import { ASSETS_PATH } from "~/constants";
-import { useUser } from "~/contexts/UserContext";
+import { useRoot } from "~/contexts/RootContext";
 import { localStorageSet } from "~/helpers";
 import useContextMenu from "~/hooks/useContextMenu";
 import { IUser } from "~/types";
@@ -31,12 +31,8 @@ const IconContainer = styled(motion.div)`
   right: 0;
 `;
 
-type Props = {
-  onClose: () => void;
-};
-
-const ProfileDrawer = ({ onClose }: Props) => {
-  const { user, setUser } = useUser();
+const ProfileDrawer = ({ onClose }: { onClose: () => void }) => {
+  const { user, setUser } = useRoot();
   const [updatedUser, setUpdatedUser] = useState<IUser>(user!);
   const [inputFieldFocus, setInputFieldFocus] = useState({
     username: false,
@@ -58,6 +54,7 @@ const ProfileDrawer = ({ onClose }: Props) => {
     username: "visible",
     status: "visible",
   });
+
   const [anchorPoint, show] = useContextMenu(profileRef, menuRef);
 
   const onFocus = (name: keyof typeof inputFieldFocus) => () => {
@@ -105,7 +102,7 @@ const ProfileDrawer = ({ onClose }: Props) => {
     if (!updatedUser.username || !updatedUser.status) return;
     if (user!.username === updatedUser.username && user!.status === updatedUser.status) return;
 
-    const res = await updateUserProfile(formData);
+    const res = await updateUser(formData);
 
     if (res.status === 200) {
       setUser(res.data);
@@ -146,7 +143,7 @@ const ProfileDrawer = ({ onClose }: Props) => {
 
             const formData = new FormData();
             formData.append("profile", file);
-            const res = await updateUserProfile(formData);
+            const res = await updateUser(formData);
             if (res.status === 200) {
               setUser(res.data);
               localStorageSet("user", res.data);
@@ -176,7 +173,7 @@ const ProfileDrawer = ({ onClose }: Props) => {
   const removeProfile = useCallback(async () => {
     setThumbnailProfile(null);
 
-    const res = await deleteUserProfilePicture();
+    const res = await deleteAvatar();
 
     if (res.status === 200) {
       setUser(res.data);
@@ -221,18 +218,6 @@ const ProfileDrawer = ({ onClose }: Props) => {
               {errors.profile}
             </Error>
           )}
-          <span
-            css={`
-              font-size: 0.813rem;
-              display: inline-block;
-              margin-top: 1rem;
-              text-align: center;
-              max-width: 15rem;
-              color: #f0513c;
-            `}
-          >
-            note: iam disabling profile feature because i cant pay for aws s3 to store the images
-          </span>
           <AnimatePresence>
             {show && (
               <Menu menuRef={menuRef} anchorPoint={anchorPoint}>

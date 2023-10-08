@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+  chatr-1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - CORS_ORIGIN=${CORS_ORIGIN}
+      - UPSTASH_REDIS_REST_URL=${UPSTASH_REDIS_REST_URL}
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET="waw"
+
+  chatr-2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "6000:6000"
+    environment:
+      - PORT=6000
+      - CORS_ORIGIN=${CORS_ORIGIN}
+      - UPSTASH_REDIS_REST_URL=${UPSTASH_REDIS_REST_URL}
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET="waw"
+
+  chatr-3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "7000:7000"
+    environment:
+      - PORT=7000
+      - CORS_ORIGIN=${CORS_ORIGIN}
+      - UPSTASH_REDIS_REST_URL=${UPSTASH_REDIS_REST_URL}
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET="waw"
+
+
+  # mongodb:
+  #   image: mongo:6.0.1
+  #   container_name: mongodb
+  #   volumes:
+  #     - ${PWD}/db/mongo:/data/db
+  #   ports:
+  #     - 27018:27017
+  #   networks:
+  #     - default
+  #   restart: unless-stopped  
+
+  caddy:
+    image: caddy/caddy:2.7.3-alpine
+    container_name: caddy-server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:

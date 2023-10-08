@@ -2,10 +2,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { formInModalVariant } from "~/animation";
 import { addContact } from "~/api";
 import Modal from "~/components/templates/Modal";
 import { Button, Error, Flex, IconMapper, Input, Label } from "~/components/UI/atoms";
-import { formInModalVariant } from "~/animation";
 
 const Container = styled(motion.form)`
   padding: 1rem;
@@ -20,17 +20,13 @@ const Title = styled.h3`
   font-weight: 500;
 `;
 
-type Props = {
-  onModalClose: () => void;
-};
-
-const ContactFormModal = ({ onModalClose }: Props) => {
+const ContactFormModal = ({ onModalClose }: { onModalClose: () => void }) => {
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
   const { isLoading, mutateAsync } = useMutation(addContact, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(["contacts"], {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(["contacts"], {
         exact: true,
         refetchType: "inactive",
       });
@@ -108,7 +104,6 @@ const ContactFormModal = ({ onModalClose }: Props) => {
             size="md"
             variant="secondary"
             onChange={onChange}
-            autoFocus
           />
           {error && (
             <Error id="username-error" data-testid="username-error">

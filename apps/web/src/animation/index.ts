@@ -57,7 +57,7 @@ const formInModalVariant: Variants = {
 const mainVariant: Variants = {
   hidden: {
     opacity: 0,
-    y: -100,
+    y: -50,
     transition: {
       duration: 0.3,
       ease: "easeInOut",
@@ -92,4 +92,31 @@ const inputIconVariant: Variants = {
   },
 };
 
-export { drawerVariant, modalVariant, formInModalVariant, mainVariant, inputIconVariant };
+const onlineUserVariant = {
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.3,
+      ease: "easeInOut",
+    },
+  },
+  hidden: {
+    opacity: 0,
+    y: -15,
+    transition: {
+      duration: 0.3,
+      ease: "easeInOut",
+    },
+  },
+  exist: {
+    opacity: 0,
+    y: 15,
+    transition: {
+      duration: 0.3,
+      ease: "easeInOut",
+    },
+  },
+};
+
+export { drawerVariant, modalVariant, formInModalVariant, mainVariant, inputIconVariant, onlineUserVariant };

@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-export interface IChats extends mongoose.Document {
+export interface IChatInput {
   uuid: string;
   from: string;
   to: string;
@@ -9,7 +9,9 @@ export interface IChats extends mongoose.Document {
   sent: number;
 }
 
-const ChatsSchema: Schema = new Schema({
+export interface IChat extends mongoose.Document, IChatInput {}
+
+const ChatSchema: Schema = new Schema({
   uuid: {
     type: String,
     required: true,
@@ -22,4 +24,4 @@ const ChatsSchema: Schema = new Schema({
   sent: { type: Number, required: true },
 });
 
-export default mongoose.model<IChats>("Chats", ChatsSchema);
+export default mongoose.model<IChat>("Chat", ChatSchema);

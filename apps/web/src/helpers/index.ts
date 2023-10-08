@@ -16,7 +16,7 @@ function localStorageSet<T>(key: string, value: T): void {
 
 function localStorageGet<T>(key: string): T {
   const value = localStorage.getItem(key);
-  return value ? JSON.parse(value) : undefined;
+  return value ? JSON.parse(value) : null;
 }
 
 export { localStorageSet, localStorageGet, createCtx };

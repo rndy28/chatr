@@ -1,16 +1,16 @@
 import styled, { css } from "styled-components";
 import React from "react";
 
-type FlexT = {
+interface IFlex {
   direction: React.CSSProperties["flexDirection"];
   justifyContent: React.CSSProperties["justifyContent"];
   alignItems: React.CSSProperties["alignItems"];
   flex: React.CSSProperties["flex"];
   flexWrap: React.CSSProperties["flexWrap"];
   gap: number;
-};
+}
 
-export const Flex = styled.div<Partial<FlexT>>`
+export const Flex = styled.div<Partial<IFlex>>`
   display: flex;
   flex-direction: ${(p) => p.direction};
   justify-content: ${(p) => p.justifyContent};

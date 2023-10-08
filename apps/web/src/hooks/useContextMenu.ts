@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-type AnchorPoint = {
+interface AnchorPoint {
   y: number;
   x: number;
-};
+}
 
 const useContextMenu = <RefType extends HTMLElement>(
   ref: React.RefObject<RefType>,
@@ -18,8 +18,9 @@ const useContextMenu = <RefType extends HTMLElement>(
   const handleClick = useCallback(
     (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      const containsMenu = menuRef.current && menuRef.current.contains(target as Node);
-      if ((ref.current && ref.current.contains(target as Node)) || containsMenu) {
+      const containsMenu = menuRef.current?.contains(target as Node);
+      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+      if (ref.current?.contains(target as Node) || containsMenu) {
         if (containsMenu) return;
         setAnchorPoint({
           x: event.pageX,

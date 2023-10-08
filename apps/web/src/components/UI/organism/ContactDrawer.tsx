@@ -1,9 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { Suspense } from "react";
 import styled from "styled-components";
 import { getContacts } from "~/api";
 import Drawer from "~/components/templates/Drawer";
 import { Contact, Loader, SearchBar } from "~/components/UI";
+import { REQUEST_SELECTED_CONVERSATION_CHANNEL } from "~/constants";
+import { useChat } from "~/contexts/ChatContext";
+import { useRoot } from "~/contexts/RootContext";
 import useDebouncedQuery from "~/hooks/useDebouncedQuery";
 import type { IUser } from "~/types";
 
@@ -15,58 +18,74 @@ const Container = styled.div`
   overflow-y: auto;
 `;
 
-type Props = {
+interface Props {
   onClose: () => void;
-  setConversation: (user: IUser) => void;
-};
+}
 
-const ContactDrawer = ({ onClose, setConversation }: Props) => {
-  const [contacts, setContacts] = useState<IUser[]>([]);
+const ContactDrawer = ({ onClose }: Props) => {
   const [query, onDebouncedQuery] = useDebouncedQuery();
-  const { data: response, status } = useQuery(["contacts"], getContacts);
+
+  const { setConversationWith, setMessages } = useChat();
+  const { socket } = useRoot();
 
   const onConversationWithContact = (contact: IUser) => () => {
-    setConversation(contact);
+    setConversationWith(contact);
+    setMessages((prev) =>
+      prev.map((message) => {
+        if (message.isRead) return message;
+
+        if (message.from.username === contact.username) {
+          // eslint-disable-next-line no-param-reassign
+          message.isRead = !message.isRead;
+          // reset unread message
+          message.unreadMessages = 0;
+          return message;
+        }
+
+        return message;
+      })
+    );
+    socket.emit(REQUEST_SELECTED_CONVERSATION_CHANNEL, contact.username);
     onClose();
   };
-
-  useEffect(() => {
-    if (status === "success") {
-      setContacts(response.data);
-    }
-    return () => {
-      setContacts([]);
-    };
-  }, [status]);
-
-  // eslint-disable-next-line max-len
-  const filteredContacts = contacts.filter((contact) => contact.username.toLowerCase().includes(query.toLowerCase()));
-
-  if (status === "loading") {
-    return (
-      <Drawer title="Contact" onHide={onClose}>
-        <Loader size="md" />
-      </Drawer>
-    );
-  }
 
   return (
     <Drawer title="Contact" onHide={onClose}>
       <SearchBar placeholder="search contact..." onChange={onDebouncedQuery} />
-      <Container>
-        {filteredContacts.map((contact) => (
-          <Contact
-            key={contact.username}
-            onClick={onConversationWithContact({
-              profile: contact.profile,
-              status: contact.status,
-              username: contact.username,
-            })}
-            {...contact}
-          />
-        ))}
-      </Container>
+      <Suspense fallback={<Loader size="md" />}>
+        <Contacts query={query} onConversationWithContact={onConversationWithContact} />
+      </Suspense>
     </Drawer>
+  );
+};
+
+const Contacts = ({
+  query,
+  onConversationWithContact,
+}: {
+  query: string;
+  onConversationWithContact: (contact: IUser) => () => void;
+}) => {
+  const { data: response } = useQuery(["contacts"], getContacts, { suspense: true });
+
+  const filteredContacts = (response?.data ?? []).filter((contact) =>
+    contact.username.toLowerCase().includes(query.toLowerCase())
+  );
+
+  return (
+    <Container>
+      {filteredContacts.map((contact) => (
+        <Contact
+          key={contact.username}
+          onClick={onConversationWithContact({
+            profile: contact.profile,
+            status: contact.status,
+            username: contact.username,
+          })}
+          {...contact}
+        />
+      ))}
+    </Container>
   );
 };
 

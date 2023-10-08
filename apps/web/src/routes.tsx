@@ -1,16 +1,16 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useUser } from "~/contexts/UserContext";
+import { useRoot } from "./contexts/RootContext";
 
 const Protected = () => {
-  const { user } = useUser();
+  const { user } = useRoot();
 
   return user ? <Outlet /> : <Navigate to="/signin" />;
 };
 
 const Public = () => {
-  const { user } = useUser();
+  const { user } = useRoot();
 
-  return !user ? <Outlet /> : <Navigate to="/signin" />;
+  return !user ? <Outlet /> : <Navigate to="/" />;
 };
 
 export { Protected, Public };

@@ -2,11 +2,10 @@
 import { IconEye, IconEyeOff } from "@tabler/icons";
 import { useMutation } from "@tanstack/react-query";
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { signup } from "~/api";
 import { Button, Error, Input, Label } from "~/components/UI";
-import { useSocket } from "~/contexts/SocketContext";
-import { useUser } from "~/contexts/UserContext";
+import { useRoot } from "~/contexts/RootContext";
 import { localStorageSet } from "~/helpers";
 import useChangePasswordType from "~/hooks/useChangePasswordType";
 import { Container, Form, Group, SmallText } from "./style";
@@ -23,15 +22,15 @@ const SignUp = () => {
     password: "",
   });
   const { isLoading, mutateAsync } = useMutation(signup);
-  const navigate = useNavigate();
 
-  const { setUser } = useUser();
-  const { socket } = useSocket();
+  const { setUser, socket } = useRoot();
+
   const isSubmitted = useRef(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     isSubmitted.current = true;
+
     if (errors.username || errors.password) return;
 
     try {
@@ -44,21 +43,19 @@ const SignUp = () => {
       };
       localStorageSet("token", data.token);
       localStorageSet("user", user);
-      setUser(user);
       socket.auth = {
         token: data.token,
       };
       socket.connect();
-      navigate("/");
+      setUser(user);
     } catch (error: any) {
-      if (error && "data" in error) {
-        const field = error.data["field" as keyof typeof error.data] as string;
-        const message = error.data["message" as keyof typeof error.data] as string;
-        setErrors((prev) => ({
-          ...prev,
-          [field]: message,
-        }));
-      }
+      const field = error.data?.field;
+      const message = error.data?.message;
+
+      setErrors((prev) => ({
+        ...prev,
+        [field]: message,
+      }));
     } finally {
       isSubmitted.current = false;
     }

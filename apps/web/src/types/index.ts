@@ -1,25 +1,27 @@
-export type ErrorT = {
-  type: "invalid" | "duplicate" | "empty" | "valid";
-  isError: boolean;
-};
 export type Position = "left" | "right";
 
-export type MessageT = {
-  from: string;
-  to: string;
+export interface IMessage {
+  uuid: string;
+  from: {
+    username: string;
+    profile: null | string;
+    status: "Playing chatr" | string;
+  };
+  to: {
+    username: string;
+    profile: null | string;
+    status: "Playing chatr" | string;
+  };
   text: string;
   isRead: boolean;
   sent: number;
-};
+  unreadMessages: number;
+}
 
 export interface IUser {
   username: string;
   profile: string | null;
   status: string;
-}
-
-export interface ISender extends Omit<IUser, "username">, Omit<MessageT, "to" | "isRead"> {
-  messageLength: number;
 }
 
 export type Size = "sm" | "md" | "lg";
