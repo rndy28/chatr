@@ -41,16 +41,16 @@ services:
       - JWT_SECRET="waw"
 
 
-  # mongodb:
-  #   image: mongo:6.0.1
-  #   container_name: mongodb
-  #   volumes:
-  #     - ${PWD}/db/mongo:/data/db
-  #   ports:
-  #     - 27018:27017
-  #   networks:
-  #     - default
-  #   restart: unless-stopped  
+  mongodb:
+    image: mongo:6.0.1
+    container_name: mongodb
+    volumes:
+      - ${PWD}/db/mongo:/data/db
+    ports:
+      - 27018:27017
+    networks:
+      - default
+    restart: unless-stopped  
 
   caddy:
     image: caddy/caddy:2.7.3-alpine

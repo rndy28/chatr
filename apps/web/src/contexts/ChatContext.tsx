@@ -48,11 +48,12 @@ const withChat = (Component: ComponentType<{}>) => () => {
             if (existingConversationIdx === index) {
               return {
                 ...prev[existingConversationIdx],
-                uuid: data.uuid,
                 sent: data.sent,
                 text: data.text,
                 isRead: data.isRead,
                 unreadMessages: data.unreadMessages,
+                from: data.from,
+                to: data.to,
               };
             }
 

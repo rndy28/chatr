@@ -146,8 +146,8 @@ export default async function socket(app: FastifyInstance) {
     await publisher.publish(ONLINE_USER_CHANNEL, String(onlineUser));
 
     socket.on(REQUEST_SELECTED_CONVERSATION, async (conversationWith: string) => {
-      const page = 1;
-      const pageSize = 10;
+      // const page = 1;
+      // const pageSize = 10;
 
       const [conversations] = await Promise.all([
         Chat.aggregate([
