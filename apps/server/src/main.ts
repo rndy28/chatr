@@ -3,17 +3,24 @@ import "dotenv/config";
 import fastify from "fastify";
 import fastifyIO from "fastify-socket.io";
 import connectDB from "./connectDB";
-import { CORS_ORIGIN, HOST, PORT } from "./constants";
+import { CORS_ORIGIN, HOST, PORT, __prod__ } from "./constants";
 import auth from "./routes/auth.route";
 import contacts from "./routes/contacts.route";
 import users from "./routes/users.route";
 import socket from "./socket";
 import type { FastifyReplyWithLocals } from "./types";
 import { compose } from "./utils/compose";
+import fs from "fs";
 
 async function buildServer() {
   const app = fastify({
     logger: true,
+    https: __prod__
+      ? null
+      : {
+          key: fs.readFileSync("localhost-key.pem"),
+          cert: fs.readFileSync("localhost.pem"),
+        },
   });
 
   await app.register(fastifyCors, {
