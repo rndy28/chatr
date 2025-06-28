@@ -63,6 +63,9 @@ async function main() {
     await app.listen({
       port: PORT,
       host: HOST,
+      listenTextResolver: (address) => {
+        return `Server listening at ${address}/api/v1`;
+      },
     });
 
     console.log(`Server started at http://${HOST}:${PORT}`);
